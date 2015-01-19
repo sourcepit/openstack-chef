@@ -1,5 +1,5 @@
 node['openstack']['repos'].each do |repo|
-  execute 'install epel repo' do
+  execute 'install rpm repo' do
     command 'yum reinstall -y ' + repo
     action :run
   end
