@@ -1,0 +1,8 @@
+{
+	"name": "openstack",
+	"version": "0.1.0",
+	"dependencies": 
+	{
+		"mariadb": ">= 0.2.11"
+	}
+}

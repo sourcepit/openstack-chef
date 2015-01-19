@@ -1,0 +1,4 @@
+/cookbooks/
+/.project
+/.chef/
+/Berksfile.lock
