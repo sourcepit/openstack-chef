@@ -1,9 +1,8 @@
-package 'http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm' do
-  action :upgrade
-end 
-
-package 'http://rdo.fedorapeople.org/openstack-juno/rdo-release-juno.rpm' do
-  action :upgrade
+node['openstack']['repos'].each do |repo|
+  execute 'install epel repo' do
+    command 'yum reinstall -y ' + repo
+    action :run
+  end
 end
 
 package 'openstack-selinux' do
