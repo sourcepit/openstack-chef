@@ -1,0 +1,25 @@
+{
+	"name": "controller+network.json",
+	"json_class": "Chef::Role",
+	"default_attributes": 
+	{
+		
+	},
+
+	"override_attributes": 
+	{
+		
+	},
+
+	"chef_type": "role",
+	"run_list": 
+	[
+		"recipe[openstack::common]",
+		"recipe[openstack::mariadb]",
+		"recipe[openstack::rabbitmq]"
+	],
+	"env_run_lists": 
+	{
+		
+	}
+}
