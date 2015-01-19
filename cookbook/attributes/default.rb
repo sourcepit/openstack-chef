@@ -5,7 +5,8 @@ default['openstack']['repos']  = [
 
 default['mariadb']['root_password']  = ''
 default['mariadb']['bind_address']  = ''
-  
+
+default['rabbitmq']['bind_address'] = ''
 default['rabbitmq']['user'] = ''
 default['rabbitmq']['password'] = ''
 
