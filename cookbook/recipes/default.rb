@@ -6,4 +6,3 @@
 #
 # All rights reserved - Do Not Redistribute
 #
-include_recipe "#{cookbook_name}::mariadb"
