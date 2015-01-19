@@ -1,6 +1,35 @@
-node.override['mariadb']['server_root_password'] = node['openstack']['mariadb']['root_password']
-node.override['mariadb']['allow_root_pass_change'] = node['openstack']['mariadb']['allow_root_pass_change']
-node.override['mariadb']['install']['version'] = '10.1'
-node.override['mariadb']['use_default_repository'] = true
 
-include_recipe "mariadb::server"
+#Install client packages
+%w{mariadb MySQL-python}.each do |pkg|
+  package pkg do
+    action :install
+  end
+end
+
+#Install server packages
+package 'mariadb-server' do
+  action :install
+  notifies :enable, 'service[mariadb]', :immediately
+  notifies :start, 'service[mariadb]', :immediately
+  notifies :run, 'execute[change first install root password]', :immediately
+end
+
+execute 'change first install root password' do
+  # Add sensitive true when foodcritic #233 fixed
+  command '/usr/bin/mysqladmin -u root password \'' + node['mariadb']['root_password'] + '\''
+  action :nothing
+  not_if { node['mariadb']['root_password'].empty? }
+end
+
+template '/etc/my.cnf' do
+  source 'my.cnf.erb'
+  owner 'root'
+  group 'root'
+  mode '0644'
+  notifies :restart, 'service[mariadb]', :immediately
+end
+
+service 'mariadb' do
+  supports restart: true
+  action :nothing
+end
