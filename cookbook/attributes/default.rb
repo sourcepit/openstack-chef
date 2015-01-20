@@ -24,8 +24,9 @@ default['rabbitmq']['password'] = ''
 default['openstack']['logging']['verbose'] = 'false'
 default['openstack']['logging']['debug'] = 'false'
   
-default['openstack']['ip_controller'] = node['network']['ip_management']
-default['openstack']['hosts_controller'] = node['network']['hosts_management']
+default['openstack']['controller']['ip'] = node['network']['ip_management']
+default['openstack']['controller']['hosts'] = node['network']['hosts_management']
+default['openstack']['controller']['host'] = node['openstack']['controller']['hosts'][0]
   
 default['openstack']['db']['user'] = 'admin'
 default['openstack']['db']['password'] = 'secret'
