@@ -1,5 +1,5 @@
 execute 'create_db' do
-  command create_create_db_cmd(node['mariadb']['root_password'], "keystone", node['openstack']['keystone']['db']['user'], node['openstack']['keystone']['db']['password'])
+  command create_create_db_cmd(node['mariadb']['root_password'], "keystone", node['openstack']['identity']['db']['user'], node['openstack']['identity']['db']['password'])
   action :run
   notifies :restart, 'service[mariadb]', :immediately
 end
@@ -14,8 +14,8 @@ end
 template '/etc/keystone/keystone.conf' do
   source 'keystone.conf.erb'
   variables(
-  :db_url => create_db_url(node['mariadb']['host'], "keystone", node['openstack']['keystone']['db']['user'], node['openstack']['keystone']['db']['password']),
-  :admin_token => node['openstack']['keystone']['admin_token'],
+  :db_url => create_db_url(node['mariadb']['host'], "keystone", node['openstack']['identity']['db']['user'], node['openstack']['identity']['db']['password']),
+  :admin_token => node['openstack']['identity']['admin_token'],
   :verbose => node['openstack']['logging']['verbose'],
   :debug => node['openstack']['logging']['debug']
   )
@@ -56,7 +56,7 @@ end
 
 bash 'create admin and service tenants' do
   code <<-EOH
-export OS_SERVICE_TOKEN=#{node['openstack']['keystone']['admin_token']}
+export OS_SERVICE_TOKEN=#{node['openstack']['identity']['admin_token']}
 export OS_SERVICE_ENDPOINT=http://#{node['openstack']['controller']['host']}:35357/v2.0
 
 keystone tenant-create --name admin --description "Admin Tenant"
@@ -71,7 +71,7 @@ end
 
 bash 'create the service entity and API endpoints' do
   code <<-EOH
-export OS_SERVICE_TOKEN=#{node['openstack']['keystone']['admin_token']}
+export OS_SERVICE_TOKEN=#{node['openstack']['identity']['admin_token']}
 export OS_SERVICE_ENDPOINT=http://#{node['openstack']['controller']['host']}:35357/v2.0
   
 keystone service-create --name keystone --type identity --description "OpenStack Identity"
