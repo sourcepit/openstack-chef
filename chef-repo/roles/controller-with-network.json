@@ -17,7 +17,8 @@
 		"recipe[openstack::network]",
 		"recipe[openstack::common]",
 		"recipe[openstack::mariadb]",
-		"recipe[openstack::rabbitmq]"
+		"recipe[openstack::rabbitmq]",
+		"recipe[openstack::identity-controller]"
 	],
 
 	"env_run_lists": 
