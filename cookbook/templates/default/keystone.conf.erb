@@ -1,0 +1,12 @@
+[DEFAULT]
+verbose=<%= @verbose %>
+debug=<%= @debug %>
+
+admin_token=<%= @admin_token %>
+
+[database]
+connection=mysql://<%= @db_url %>
+
+[token]
+provider=keystone.token.providers.uuid.Provider
+driver=keystone.token.persistence.backends.sql.Token

@@ -6,5 +6,9 @@ node['openstack']['repos'].each do |repo|
 end
 
 package 'openstack-selinux' do
-  action :upgrade
+  action :install
+end
+
+template '/etc/hosts' do
+  source 'hosts.erb'
 end

@@ -11,6 +11,25 @@ module Openstack
       sql += "GRANT ALL PRIVILEGES ON " + db_name + ".* TO '" + db_user + "'@'%' IDENTIFIED BY '" + db_pass + "';"
       sql += "\""
     end
+
+    def create_db_url(host, database, user, password)
+      url = "mysql://"
+      unless user.nil? or user.empty?
+        url += user
+        unless password.nil? or password.empty?
+          url += ":" + password
+        end
+        url += "@"
+      end
+      if host.nil? or host.empty?
+        url += "localhost"
+      else
+        url += host
+      end
+      unless database.nil? or database.empty?
+        url += "/" + database
+      end
+    end
   end
 end
 

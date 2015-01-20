@@ -1,0 +1,12 @@
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+<% unless node['network']['hosts_management'].nil? or node['network']['hosts_management'].empty? %>
+<%= node['network']['ip_management'] %> <%= node['network']['hosts_management'].join(" ") %>
+<% end %>
+
+<% unless node['openstack']['hosts_controller'].nil? or node['openstack']['hosts_controller'].empty? %>
+<% unless node['openstack']['ip_controller'].nil? or node['openstack']['ip_controller'] == node['network']['ip_management'] %>
+<%= node['openstack']['ip_controller'] %> <%= node['openstack']['hosts_controller'].join(" ") %>
+<% end %>
+<% end %>
