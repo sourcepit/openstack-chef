@@ -59,3 +59,20 @@ keystone tenant-create --name service --description "Service Tenant"
   EOH
   action :run
 end
+
+bash 'create the service entity and API endpoints' do
+  code <<-EOH
+export OS_SERVICE_TOKEN=#{node['openstack']['keystone']['admin_token']}
+export OS_SERVICE_ENDPOINT=http://#{node['openstack']['controller']['host']}:35357/v2.0
+  
+keystone service-create --name keystone --type identity --description "OpenStack Identity"
+    
+keystone endpoint-create \
+  --service-id $(keystone service-list | awk '/ identity / {print $2}') \
+  --publicurl http://#{node['openstack']['controller']['host']}:5000/v2.0 \
+  --internalurl http://#{node['openstack']['controller']['host']}:5000/v2.0 \
+  --adminurl http://#{node['openstack']['controller']['host']}:35357/v2.0 \
+  --region regionOne
+  EOH
+  action :run
+end
