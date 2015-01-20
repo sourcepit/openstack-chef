@@ -28,6 +28,10 @@ default['openstack']['controller']['ip'] = node['network']['ip_management']
 default['openstack']['controller']['hosts'] = node['network']['hosts_management']
 default['openstack']['controller']['host'] = node['openstack']['controller']['hosts'][0]
   
+default['openstack']['admin']['user'] = 'admin'
+default['openstack']['admin']['password'] = 'secret'
+default['openstack']['admin']['email'] = 'admin@' + node['openstack']['controller']['host'] 
+  
 default['openstack']['db']['user'] = 'admin'
 default['openstack']['db']['password'] = 'secret'
     

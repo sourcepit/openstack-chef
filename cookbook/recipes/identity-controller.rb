@@ -44,3 +44,18 @@ execute 'use cron to periodically purge expired tokens' do
   command "(crontab -l -u keystone 2>&1 | grep -q token_flush) || echo '@hourly /usr/bin/keystone-manage token_flush >/var/log/keystone/keystone-tokenflush.log 2>&1' >> /var/spool/cron/keystone"
   action :run
 end
+
+bash 'create admin and service tenants' do
+  code <<-EOH
+export OS_SERVICE_TOKEN=#{node['openstack']['keystone']['admin_token']}
+export OS_SERVICE_ENDPOINT=http://#{node['openstack']['controller']['host']}:35357/v2.0
+
+keystone tenant-create --name admin --description "Admin Tenant"
+keystone user-create --name #{node['openstack']['admin']['user']} --pass #{node['openstack']['admin']['password']} --email #{node['openstack']['admin']['email']}
+keystone role-create --name admin
+keystone user-role-add --user #{node['openstack']['admin']['user']} --tenant admin --role admin
+
+keystone tenant-create --name service --description "Service Tenant"
+  EOH
+  action :run
+end
