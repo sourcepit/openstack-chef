@@ -18,7 +18,6 @@ template '/etc/keystone/keystone.conf' do
   :verbose => node['openstack']['logging']['verbose'],
   :debug => node['openstack']['logging']['debug']
   )
-  notifies :restart, 'service[network]', :immediately
 end
 
 bash 'create generic certificates' do
