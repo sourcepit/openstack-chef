@@ -34,8 +34,13 @@ default['openstack']['admin']['email'] = 'admin@' + node['openstack']['controlle
   
 default['openstack']['db']['user'] = 'admin'
 default['openstack']['db']['password'] = 'secret'
+default['openstack']['service']['password'] = 'secret'
     
 default['openstack']['keystone']['db']['user'] = node['openstack']['db']['user']
 default['openstack']['keystone']['db']['password'] = node['openstack']['db']['password']
 default['openstack']['keystone']['admin_token'] = '17986b3c37e2b95dcf03'
+  
+default['openstack']['image']['db']['user'] = node['openstack']['db']['user']
+default['openstack']['image']['db']['password'] = node['openstack']['db']['password']
+default['openstack']['image']['service']['password'] = node['openstack']['service']['password']
 

@@ -1,0 +1,20 @@
+[DEFAULT]
+verbose=<%= @verbose %>
+debug=<%= @debug %>
+
+[database]
+connection=<%= @db_url %>
+
+[keystone_authtoken]
+auth_uri=<%= @keystone_auth_uri %>
+identity_uri=<%= @keystone_identity_uri %>
+admin_tenant_name=service
+admin_user=<%= @service_user %>
+admin_password=<%= @service_password %>
+
+[paste_deploy]
+flavor = keystone
+
+[glance_store]
+default_store = file
+filesystem_store_datadir = /var/lib/glance/images/
