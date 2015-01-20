@@ -8,6 +8,7 @@ end
   package pkg do
     action :install
   end
+  notifies :run, 'template[/etc/keystone/keystone.conf]', :immediately
 end
 
 template '/etc/keystone/keystone.conf' do
@@ -18,6 +19,14 @@ template '/etc/keystone/keystone.conf' do
   :verbose => node['openstack']['logging']['verbose'],
   :debug => node['openstack']['logging']['debug']
   )
+  action :nothing
+  notifies :run, 'bash[create generic certificates]', :immediately
+  notifies :run, 'execute[db_sync]', :immediately
+  notifies :enable, 'service[openstack-keystone]', :immediately
+  notifies :start, 'service[openstack-keystone]', :immediately
+  notifies :run, 'execute[use cron to periodically purge expired tokens]', :immediately
+  notifies :run, 'bash[create admin and service tenants]', :immediately
+  notifies :run, 'bash[create the service entity and API endpoints]', :immediately
 end
 
 bash 'create generic certificates' do
@@ -27,22 +36,22 @@ chown -R keystone:keystone /var/log/keystone
 chown -R keystone:keystone /etc/keystone/ssl
 chmod -R o-rwx /etc/keystone/ssl
   EOH
-  action :run
+  action :nothing
 end
 
 execute 'db_sync' do
   command "su -s /bin/sh -c 'keystone-manage db_sync' keystone"
-  action :run
+  action :nothing
 end
 
 service 'openstack-keystone' do
   supports status: true, restart: true
-  action [:enable, :start]
+  action :nothing
 end
 
 execute 'use cron to periodically purge expired tokens' do
   command "(crontab -l -u keystone 2>&1 | grep -q token_flush) || echo '@hourly /usr/bin/keystone-manage token_flush >/var/log/keystone/keystone-tokenflush.log 2>&1' >> /var/spool/cron/keystone"
-  action :run
+  action :nothing
 end
 
 bash 'create admin and service tenants' do
@@ -57,7 +66,7 @@ keystone user-role-add --user #{node['openstack']['admin']['user']} --tenant adm
 
 keystone tenant-create --name service --description "Service Tenant"
   EOH
-  action :run
+  action :nothing
 end
 
 bash 'create the service entity and API endpoints' do
@@ -74,5 +83,5 @@ keystone endpoint-create \
   --adminurl http://#{node['openstack']['controller']['host']}:35357/v2.0 \
   --region regionOne
   EOH
-  action :run
+  action :nothing
 end
