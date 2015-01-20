@@ -3,3 +3,9 @@ execute 'create_db' do
   action :run
   notifies :restart, 'service[mariadb]', :immediately
 end
+
+%w(openstack-keystone python-keystoneclient).each do |pkg|
+  package pkg do
+    action :install
+  end
+end
