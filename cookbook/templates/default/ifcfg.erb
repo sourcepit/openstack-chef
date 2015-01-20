@@ -1,0 +1,15 @@
+<% if @IPADDR.nil? or @IPADDR.empty? %>
+TYPE=Ethernet
+DEVICE=<%= @DEVICE %>
+ONBOOT="yes"
+BOOTPROTO="none"
+<% else %>
+TYPE=Ethernet
+DEVICE=<%= @DEVICE %>
+IPADDR=<%= @IPADDR %>
+NETMASK=255.255.255.0
+ONBOOT=yes
+BOOTPROTO=none
+NM_CONTROLLED=no
+PEERDNS=no
+<% end %>
