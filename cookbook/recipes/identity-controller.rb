@@ -7,7 +7,7 @@ end
 %w(openstack-keystone python-keystoneclient).each do |pkg|
   package pkg do
     action :install
-    notifies :run, 'template[/etc/keystone/keystone.conf]', :immediately
+    notifies :create, 'template[/etc/keystone/keystone.conf]', :immediately
   end
 end
 
