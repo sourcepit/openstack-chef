@@ -6,7 +6,7 @@ module Openstack
         sql += "-p" + db_root_pass + " "
       end
       sql += "-e \""
-      sql += "CREATE DATABASE " + db_name + ";\n"
+      sql += "CREATE DATABASE IF NOT EXISTS " + db_name + ";\n"
       sql += "GRANT ALL PRIVILEGES ON " + db_name + ".* TO '" + db_user + "@\'localhost\' IDENTIFIED BY '" + db_pass + "';\n"
       sql += "GRANT ALL PRIVILEGES ON " + db_name + ".* TO '" + db_user + "@'%' IDENTIFIED BY '" + db_pass + "';"
       sql += "\""
