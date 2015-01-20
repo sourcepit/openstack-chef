@@ -1,5 +1,5 @@
 module Openstack
-  module DBHelper
+  module Helpers
     def create_create_db_cmd(db_root_pass, db_name, db_user, db_pass)
       sql = "mysql -u root "
       unless db_root_pass.nil? or db_root_pass.empty?
@@ -14,6 +14,6 @@ module Openstack
   end
 end
 
-#Chef::Recipe.send(:include, ::Openstack::Helpers)
-#Chef::Resource.send(:include, ::Openstack::Helpers)
-#Chef::Provider.send(:include, ::Openstack::Helpers)
+Chef::Recipe.send(:include, ::Openstack::Helpers)
+Chef::Resource.send(:include, ::Openstack::Helpers)
+Chef::Provider.send(:include, ::Openstack::Helpers)
