@@ -5,7 +5,7 @@ debug=<%= @debug %>
 admin_token=<%= @admin_token %>
 
 [database]
-connection=mysql://<%= @db_url %>
+connection=<%= @db_url %>
 
 [token]
 provider=keystone.token.providers.uuid.Provider
