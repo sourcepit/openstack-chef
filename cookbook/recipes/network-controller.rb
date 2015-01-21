@@ -30,6 +30,21 @@ openstack_identity "create network service user and endpoint" do
   action [:user_create, :user_role_add, :service_create, :endpoint_create]
 end
 
+if node['openstack']['is_network_node'] or node['openstack']['is_compute_node']
+  template '/etc/sysctl.conf' do
+    source 'sysctl.conf.erb'
+    variables(
+    :is_network_node => node['openstack']['is_network_node']
+    )
+    action :create
+    notifies :run, 'execute[sysctl]', :immediately
+  end
+  execute 'sysctl' do
+    command 'sysctl -p'
+    action :nothing
+  end
+end
+
 %w(openstack-neutron openstack-neutron-ml2 python-neutronclient which).each do |pkg|
   package pkg do
     action :install
