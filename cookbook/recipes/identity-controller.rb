@@ -1,4 +1,4 @@
-execute 'create_db' do
+execute 'create identity db' do
   command create_create_db_cmd(node['mariadb']['root_password'], "keystone", node['openstack']['identity']['db']['user'], node['openstack']['identity']['db']['password'])
   action :run
   notifies :restart, 'service[mariadb]', :immediately
@@ -20,8 +20,6 @@ template '/etc/keystone/keystone.conf' do
   )
   action :create
   notifies :run, 'bash[create generic certificates]', :immediately
-  notifies :run, 'execute[db_sync]', :immediately
-  notifies :run, 'execute[use cron to periodically purge expired tokens]', :immediately
 end
 
 bash 'create generic certificates' do
@@ -34,14 +32,14 @@ chmod -R o-rwx /etc/keystone/ssl
   action :nothing
 end
 
-execute 'db_sync' do
+execute 'sync identity db' do
   command "su -s /bin/sh -c 'keystone-manage db_sync' keystone"
-  action :nothing
+  action :run
 end
 
 execute 'use cron to periodically purge expired tokens' do
   command "(crontab -l -u keystone 2>&1 | grep -q token_flush) || echo '@hourly /usr/bin/keystone-manage token_flush >/var/log/keystone/keystone-tokenflush.log 2>&1' >> /var/spool/cron/keystone"
-  action :nothing
+  action :run
 end
 
 service 'openstack-keystone' do
@@ -69,9 +67,7 @@ end
 
 openstack_identity "create service tenant" do
   auth_uri "http://#{node['openstack']['controller']['host']}:35357/v2.0"
-  admin_tenant node['openstack']['admin']['tenant']
-  admin_user node['openstack']['admin']['user']
-  admin_password anode['openstack']['admin']['password']
+  admin_token node['openstack']['identity']['admin_token']
 
   # tenant_create
   tenant_name node['openstack']['service']['tenant']
@@ -82,9 +78,7 @@ end
 
 openstack_identity "create identity service and endpoint" do
   auth_uri "http://#{node['openstack']['controller']['host']}:35357/v2.0"
-  admin_tenant node['openstack']['admin']['tenant']
-  admin_user node['openstack']['admin']['user']
-  admin_password anode['openstack']['admin']['password']
+  admin_token node['openstack']['identity']['admin_token']
 
   # service_create
   service_name 'keystone'

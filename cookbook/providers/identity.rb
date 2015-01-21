@@ -15,12 +15,19 @@ def get_admin_env(resource)
 end
 
 def get_user_env(resource)
-  {
-    'OS_TENANT_NAME' => resource.tenant_name ,
-    'OS_USERNAME' => resource.user,
-    'OS_PASSWORD' => resource.password,
-    'OS_AUTH_URL' => resource.auth_uri
-  }
+  if (resource.admin_token.nil? or resource.admin_token.empty?)
+    {
+      'OS_TENANT_NAME' => resource.tenant_name ,
+      'OS_USERNAME' => resource.user,
+      'OS_PASSWORD' => resource.password,
+      'OS_AUTH_URL' => resource.auth_uri
+    }
+  else
+    {
+      'OS_SERVICE_ENDPOINT' => resource.auth_uri,
+      'OS_SERVICE_TOKEN' => resource.admin_token,
+    }
+  end
 end
 
 action :tenant_create do
@@ -43,7 +50,7 @@ action :tenant_create do
 
 end
 
-action :create_user do
+action :user_create do
 
   cmd = Mixlib::ShellOut.new("keystone --insecure user-get #{new_resource.user}")
   cmd.environment = get_admin_env(new_resource)
@@ -85,8 +92,9 @@ end
 
 action :user_role_add do
 
-  cmd = Mixlib::ShellOut.new("keystone --insecure user-role-list | grep \" #{new_resource.role} \"")
-  cmd.environment = get_user_env(new_resource)
+  cmd = Mixlib::ShellOut.new("keystone --insecure user-role-list --user #{new_resource.user} --tenant #{new_resource.tenant_name} | grep \" #{new_resource.role} \"")
+  cmd.environment = get_admin_env(new_resource)
+
   cmd.run_command
 
   exists = !cmd.stdout.empty?

@@ -9,7 +9,12 @@
 	},
 	"chef_type": "role",
 	"run_list": [
-		"recipe[openstack::test]"
+		"recipe[openstack::network]",
+		"recipe[openstack::common]",
+		"recipe[openstack::mariadb]",
+		"recipe[openstack::rabbitmq]",
+		"recipe[openstack::identity-controller]",
+		"recipe[openstack::image-controller]"
 	],
 	"env_run_lists": {
 		

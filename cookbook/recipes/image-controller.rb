@@ -1,4 +1,4 @@
-execute 'create_db' do
+execute 'create image db' do
   command create_create_db_cmd(node['mariadb']['root_password'], "glance", node['openstack']['image']['db']['user'], node['openstack']['image']['db']['password'])
   action :run
   notifies :restart, 'service[mariadb]', :immediately
@@ -14,7 +14,7 @@ openstack_identity "create image service user and endpoint" do
   auth_uri "http://#{node['openstack']['controller']['host']}:35357/v2.0"
   admin_tenant node['openstack']['admin']['tenant']
   admin_user node['openstack']['admin']['user']
-  admin_password anode['openstack']['admin']['password']
+  admin_password node['openstack']['admin']['password']
 
   # user_create
   user node['openstack']['image']['service']['user']
@@ -64,7 +64,7 @@ template '/etc/glance/glance-registry.conf' do
   action :create
 end
 
-execute 'db_sync' do
+execute 'sync image db' do
   command "su -s /bin/sh -c 'glance-manage db_sync' glance"
   action :run
 end
