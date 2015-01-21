@@ -24,7 +24,7 @@ openstack_identity "create compute service user and endpoint" do
   service_description 'OpenStack Compute Service'
 
   # endpoint_create
-  endpoint_url "http://#{node['openstack']['controller']['host']}:8774/v2/%\(tenant_id\)s"
+  endpoint_url "http://#{node['openstack']['controller']['host']}:8774/v2/%\\(tenant_id\\)s"
   endpoint_region 'regionOne'
 
   action [:user_create, :user_role_add, :service_create, :endpoint_create]
