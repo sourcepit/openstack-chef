@@ -37,7 +37,7 @@ template '/etc/sysctl.conf' do
   )
   action :create
   notifies :run, 'execute[sysctl]', :immediately
-  not_if do
+  only_if do
     node['openstack']['is_network_node'] or node['openstack']['is_compute_node']
   end
 end
