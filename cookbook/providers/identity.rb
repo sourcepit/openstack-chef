@@ -37,7 +37,7 @@ action :user_role_add do
     bash 'user_role_add' do
       code <<-EOH
         #{get_admin_env(new_resource)}
-        keystone --insecure --user #{new_resource.user} --tenant #{new_resource.tenant} --role #{new_resource.role}
+        keystone --insecure user-role-add --user #{new_resource.user} --tenant #{new_resource.tenant} --role #{new_resource.role}
       EOH
       action :run
       not_if <<-EOH
