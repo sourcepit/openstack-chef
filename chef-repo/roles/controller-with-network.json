@@ -19,7 +19,8 @@
 		"recipe[openstack::mariadb]",
 		"recipe[openstack::rabbitmq]",
 		"recipe[openstack::identity-controller]",
-		"recipe[openstack::image-controller]"
+		"recipe[openstack::image-controller]",
+		"recipe[openstack::compute-controller]"
 	],
 
 	"env_run_lists": 
