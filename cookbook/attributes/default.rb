@@ -35,7 +35,8 @@ default['openstack']['admin']['email'] = 'admin@' + node['openstack']['controlle
   
 default['openstack']['db']['user'] = 'admin'
 default['openstack']['db']['password'] = 'secret'
-default['openstack']['service']['user'] = 'admin'
+default['openstack']['service']['tenant'] = 'service'
+default['openstack']['service']['user'] = 'service'
 default['openstack']['service']['password'] = 'secret'
     
 default['openstack']['identity']['db']['user'] = node['openstack']['db']['user']
