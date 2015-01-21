@@ -1,0 +1,44 @@
+[DEFAULT]
+verbose=<%= @verbose %>
+debug=<%= @debug %>
+
+rpc_backend=rabbit
+rabbit_host=<%= @rabbit_host %>
+rabbit_userid=<%= @rabbit_userid %>
+rabbit_password=<%= @rabbit_password %>
+
+auth_strategy=keystone
+
+core_plugin=ml2
+service_plugins=router
+allow_overlapping_ips=True
+
+notify_nova_on_port_status_changes=True
+notify_nova_on_port_data_changes=True
+nova_url=<%= @nova_url %>
+nova_admin_auth_url=<%= @nova_admin_auth_url %>
+nova_region_name=regionOne
+nova_admin_username=<%= @nova_admin_username %>
+nova_admin_tenant_id=<%= @nova_admin_tenant_id %>
+nova_admin_password=<%= @nova_admin_password %>
+
+core_plugin=ml2
+service_plugins=router
+allow_overlapping_ips=True
+
+
+[database]
+connection=<%= @db_url %>
+
+
+[keystone_authtoken]
+auth_uri=<%= @keystone_auth_uri %>
+identity_uri=<%= @keystone_identity_uri %>
+admin_tenant_name=<%= @service_tenant %>
+admin_user=<%= @service_user %>
+admin_password=<%= @service_password %>
+
+
+[service_providers]
+service_provider=LOADBALANCER:Haproxy:neutron.services.loadbalancer.drivers.haproxy.plugin_driver.HaproxyOnHostPluginDriver:default
+service_provider=VPN:openswan:neutron.services.vpn.service_drivers.ipsec.IPsecVPNDriver:default

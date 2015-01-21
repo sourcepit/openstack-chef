@@ -17,6 +17,10 @@ vncserver_proxyclient_address=<%= @vncserver_proxyclient_address %>
 novncproxy_base_url=<%= @novncproxy_base_url %> 
 <% end %>
 
+network_api_class=nova.network.neutronv2.api.API
+security_group_api=neutron
+linuxnet_interface_driver=nova.network.linux_net.LinuxOVSInterfaceDriver
+firewall_driver=nova.virt.firewall.NoopFirewallDriver
 
 [database]
 connection=<%= @db_url %>
@@ -34,3 +38,10 @@ admin_user=<%= @service_user %>
 admin_password=<%= @service_password %>
 
 
+[neutron]
+url=<%= @neutron_url %>
+auth_strategy=keystone
+admin_auth_url=<%= @neutron_admin_auth_url %>
+admin_tenant_name=<%= @neutron_admin_tenant_name %>
+admin_username=<%= @neutron_admin_username %>
+admin_password=<%= @neutron_admin_password %>

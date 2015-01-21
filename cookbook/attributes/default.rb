@@ -53,4 +53,9 @@ default['openstack']['compute']['db']['user'] = node['openstack']['db']['user']
 default['openstack']['compute']['db']['password'] = node['openstack']['db']['password']
 default['openstack']['compute']['service']['user'] = node['openstack']['service']['user']
 default['openstack']['compute']['service']['password'] = node['openstack']['service']['password']
+  
+default['openstack']['network']['db']['user'] = node['openstack']['db']['user']
+default['openstack']['network']['db']['password'] = node['openstack']['db']['password']
+default['openstack']['network']['service']['user'] = node['openstack']['service']['user']
+default['openstack']['network']['service']['password'] = node['openstack']['service']['password']
 

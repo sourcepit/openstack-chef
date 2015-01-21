@@ -54,7 +54,13 @@ template '/etc/nova/nova.conf' do
   :keystone_identity_uri => "http://#{node['openstack']['controller']['host']}:35357",
   :service_tenant => node['openstack']['service']['tenant'],
   :service_user => node['openstack']['compute']['service']['user'],
-  :service_password => node['openstack']['compute']['service']['password']
+  :service_password => node['openstack']['compute']['service']['password'],
+  # neutron
+  :neutron_url => "http://#{node['openstack']['controller']['host']}:9696",
+  :neutron_admin_auth_url => "http://#{node['openstack']['controller']['host']}:35357/v2.0",
+  :neutron_admin_tenant_name => node['openstack']['service']['tenant'],
+  :neutron_admin_username => node['openstack']['network']['service']['user'],
+  :neutron_admin_password => node['openstack']['network']['service']['user']
   )
   action :create
 end
@@ -62,7 +68,6 @@ end
 execute 'sync compute db' do
   command "su -s /bin/sh -c 'nova-manage db sync' nova"
   action :run
-  subscribes :restart, 'template[/etc/nova/nova.conf]'
 end
 
 service 'openstack-nova-api' do
