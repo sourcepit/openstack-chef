@@ -46,7 +46,7 @@ template '/etc/neutron/neutron.conf' do
   :rabbit_userid => node['openstack']['rabbitmq']['user'],
   :rabbit_password => node['openstack']['rabbitmq']['password'],
   # nova
-  :nova_url => "http://node['openstack']['controller']['host']:8774/v2",
+  :nova_url => "http://#{node['openstack']['controller']['host']}:8774/v2",
   :nova_admin_auth_url => "http://#{node['openstack']['controller']['host']}:35357/v2.0",
   :nova_admin_username => node['openstack']['compute']['service']['user'],
   :nova_admin_tenant_id => get_tenant_id(node['openstack']['admin']['tenant'], node['openstack']['admin']['user'], node['openstack']['admin']['password'], "http://#{node['openstack']['controller']['host']}:35357/v2.0", node['openstack']['service']['tenant']),
@@ -66,6 +66,8 @@ end
 template '/etc/neutron/plugins/ml2/ml2_conf.ini' do
   source 'ml2_conf.ini.erb'
   variables(
+  :is_network_node => default['openstack']['is_network_node'],
+  :is_compute_node => default['openstack']['is_compute_node'],
   :local_ip=> node['network']['ip_tunnel']
   )
   action :create

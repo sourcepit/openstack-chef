@@ -3,10 +3,12 @@ type_drivers=flat,gre
 tenant_network_types=gre
 mechanism_drivers=openvswitch
 
+<% if @is_network_node %>
 
 [ml2_type_flat]
 flat_networks=external
 
+<% end %>
 
 [ml2_type_gre]
 tunnel_id_ranges=1:1000
@@ -17,12 +19,17 @@ enable_security_group=True
 enable_ipset=True
 firewall_driver=neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver
 
+<% if @is_network_node or @is_compute_node %>
 
 [ovs]
 local_ip=<%= @local_ip %>
 enable_tunneling=True
+<% if @is_network_node %>
 bridge_mappings=external:br-ex
+<% end %>
 
 
 [agent]
 tunnel_types=gre
+
+<% end %>

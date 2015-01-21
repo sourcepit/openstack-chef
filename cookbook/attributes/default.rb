@@ -27,7 +27,9 @@ default['openstack']['controller']['ip'] = node['network']['ip_management']
 default['openstack']['controller']['hosts'] = node['network']['hosts_management']
 default['openstack']['controller']['host'] = node['openstack']['controller']['hosts'][0]
   
-default['openstack']['is_controller'] = node['openstack']['controller']['ip'] == node['network']['ip_management']
+default['openstack']['is_controller_node'] = node['openstack']['controller']['ip'] == node['network']['ip_management']
+default['openstack']['is_network_node'] = !(node['network']['if_external'].nil? or node['network']['if_external'].empty?)
+default['openstack']['is_compute_node'] = !(node['openstack']['is_controller_node'] or node['openstack']['is_network_node'])
 
 default['openstack']['admin']['tenant'] = 'admin'  
 default['openstack']['admin']['user'] = 'admin'
