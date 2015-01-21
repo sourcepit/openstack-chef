@@ -67,7 +67,7 @@ action :service_create do
   if (exists)
     new_resource.updated_by_last_action(false)
   else
-    cmd = Mixlib::ShellOut.new("keystone --insecure service-create --name #{new_resource.service_name} --type #{new_resource.service_type} --description #{new_resource.service_description}")
+    cmd = Mixlib::ShellOut.new("keystone --insecure service-create --name #{new_resource.service_name} --type #{new_resource.service_type} --description \"#{new_resource.service_description}\"")
     cmd.environment = get_admin_env(new_resource)
     cmd.run_command
     cmd.error!
