@@ -19,20 +19,18 @@ end
 action :create_user do
 
   bash 'keystone user-create' do
-    code lazy { foo }
+    code lazy {
+      new_resource.updated_by_last_action(true)
+      <<-EOH
+        #{get_admin_env(new_resource)}
+        keystone --insecure user-create --name #{new_resource.user} --pass #{new_resource.password} 
+      EOH
+    }
     action :run
     not_if <<-EOH
         #{get_admin_env(new_resource)}
         keystone --insecure user-get #{new_resource.user} 2> /dev/null
     EOH
-  end
-  
-  def foo
-    puts "haaaaalllloooo"
-    <<-EOH
-            #{get_admin_env(new_resource)}
-            keystone --insecure user-create --name #{new_resource.user} --pass #{new_resource.password} 
-        EOH
   end
 
 end
