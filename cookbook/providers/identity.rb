@@ -18,21 +18,27 @@ end
 
 action :create_user do
 
-  bash 'keystone user-create' do
-    code lazy {
-      new_resource.updated_by_last_action(true)
-      <<-EOH
-        #{get_admin_env(new_resource)}
-        keystone --insecure user-create --name #{new_resource.user} --pass #{new_resource.password} 
-      EOH
-    }
-    action :run
-    not_if <<-EOH
-        #{get_admin_env(new_resource)}
-        keystone --insecure user-get #{new_resource.user} 2> /dev/null
-    EOH
-  end
+  cmd = Mixlib::ShellOut.new("keystone --insecure user-get #{new_resource.user} 2> /dev/null")
+  cmd.environment['OS_TENANT_NAME'] = new_resource.admin_tenant
+  cmd.environment['OS_USERNAME'] = new_resource.admin_user
+  cmd.environment['OS_PASSWORD'] = new_resource.admin_password
+  cmd.environment['OS_AUTH_URL'] = new_resource.auth_uri
+  cmd.run_command
+  cmd.error!
 
+  if cmd.stdout.empty?
+    new_resource.updated_by_last_action(false)
+  else
+    cmd = Mixlib::ShellOut.new("keystone --insecure user-create --name #{new_resource.user} --pass #{new_resource.password}")
+    cmd.environment['OS_TENANT_NAME'] = new_resource.admin_tenant
+    cmd.environment['OS_USERNAME'] = new_resource.admin_user
+    cmd.environment['OS_PASSWORD'] = new_resource.admin_password
+    cmd.environment['OS_AUTH_URL'] = new_resource.auth_uri
+    cmd.run_command
+    cmd.error!
+    new_resource.updated_by_last_action(true)
+  end
+  
 end
 
 action :user_role_add do
