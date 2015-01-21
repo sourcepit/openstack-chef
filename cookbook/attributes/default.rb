@@ -19,7 +19,7 @@ default['rabbitmq']['password'] = ''
 default['openstack']['logging']['verbose'] = 'false'
 default['openstack']['logging']['debug'] = 'false'
   
-default['openstack']['rabbitmq']['host'] = node['rabbitmq']['bind_address']
+default['openstack']['rabbitmq']['host'] = (node['rabbitmq']['bind_address'].nil? or node['rabbitmq']['bind_address'].empty?) ? 'localhost' : node['rabbitmq']['bind_address']
 default['openstack']['rabbitmq']['user'] = node['rabbitmq']['user']
 default['openstack']['rabbitmq']['password'] = node['rabbitmq']['password']
   
