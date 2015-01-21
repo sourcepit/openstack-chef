@@ -1,5 +1,5 @@
-actions :create_user
-default_action :create_user, :user_role_add
+actions :create_user, :user_role_add
+default_action :create_user
 
 attribute :auth_uri, kind_of: String
 
