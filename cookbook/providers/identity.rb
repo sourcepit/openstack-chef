@@ -78,7 +78,7 @@ end
 
 action :endpoint_create do
 
-  cmd = Mixlib::ShellOut.new("keystone --insecure service-get #{new_resource.service_name}")
+  cmd = Mixlib::ShellOut.new("keystone --insecure endpoint-get --service #{new_resource.service_type}")
   cmd.environment = get_user_env(new_resource)
   cmd.run_command
 
