@@ -37,54 +37,69 @@ action :create_user do
 end
 
 action :user_role_add do
-  begin
-    bash 'keystone user-role-add' do
-      code <<-EOH
-        #{get_admin_env(new_resource)}
-        keystone --insecure user-role-add --user #{new_resource.user} --tenant #{new_resource.tenant} --role #{new_resource.role}
-      EOH
-      action :run
-      not_if <<-EOH
-        #{get_user_env(new_resource)}
-        keystone --insecure user-role-list 2> /dev/null | grep " #{new_resource.role} "
-      EOH
-    end
+
+  cmd = Mixlib::ShellOut.new("keystone --insecure user-role-list | grep \" #{new_resource.role} \"")
+  cmd.environment = get_user_env(new_resource)
+  cmd.run_command
+
+  exists = !cmd.stdout.empty?
+
+  if (exists)
+    new_resource.updated_by_last_action(false)
+  else
+    cmd = Mixlib::ShellOut.new("keystone --insecure user-role-add --user #{new_resource.user} --tenant #{new_resource.tenant} --role #{new_resource.role}")
+    cmd.environment = get_admin_env(new_resource)
+    cmd.run_command
+    cmd.error!
+    new_resource.updated_by_last_action(true)
   end
+
 end
 
 action :service_create do
-  begin
-    bash 'keystone service-create' do
-      code <<-EOH
-        #{get_admin_env(new_resource)}
-        keystone --insecure service-create --name #{new_resource.service_name} --type #{new_resource.service_type} --description #{new_resource.service_description}
-      EOH
-      action :run
-      not_if <<-EOH
-        #{get_admin_env(new_resource)}
-        keystone --insecure service-get #{new_resource.service_name} 2> /dev/null
-      EOH
-    end
+
+  cmd = Mixlib::ShellOut.new("keystone --insecure service-get #{new_resource.service_name}")
+  cmd.environment = get_user_env(new_resource)
+  cmd.run_command
+
+  exists = !cmd.stdout.empty?
+
+  if (exists)
+    new_resource.updated_by_last_action(false)
+  else
+    cmd = Mixlib::ShellOut.new("keystone --insecure service-create --name #{new_resource.service_name} --type #{new_resource.service_type} --description #{new_resource.service_description}")
+    cmd.environment = get_admin_env(new_resource)
+    cmd.run_command
+    cmd.error!
+    new_resource.updated_by_last_action(true)
   end
+
 end
 
 action :endpoint_create do
-  begin
-    bash 'keystone endpoint-create' do
-      code <<-EOH
-        #{get_admin_env(new_resource)}
-        keystone endpoint-create \
-          --service-id $(keystone service-list | awk '/ #{new_resource.service_type} / {print $2}') \
-          --publicurl #{new_resource.endpoint_url} \
-          --internalurl #{new_resource.endpoint_url} \
-          --adminurl #{new_resource.endpoint_url} \
-          --region #{new_resource.endpoint_region}
-      EOH
-      action :run
-      not_if <<-EOH
-        #{get_admin_env(new_resource)}
-        keystone --insecure endpoint-get --service #{new_resource.service_type} 2> /dev/null
-      EOH
-    end
+
+  cmd = Mixlib::ShellOut.new("keystone --insecure service-get #{new_resource.service_name}")
+  cmd.environment = get_user_env(new_resource)
+  cmd.run_command
+
+  exists = !cmd.stdout.empty?
+
+  if (exists)
+    new_resource.updated_by_last_action(false)
+  else
+    cmdStr <<-eos
+      keystone endpoint-create \
+        --service-id $(keystone service-list | awk '/ #{new_resource.service_type} / {print $2}') \
+        --publicurl #{new_resource.endpoint_url} \
+        --internalurl #{new_resource.endpoint_url} \
+        --adminurl #{new_resource.endpoint_url} \
+        --region #{new_resource.endpoint_region}
+    eos
+    cmd = Mixlib::ShellOut.new(cmdStr)
+    cmd.environment = get_admin_env(new_resource)
+    cmd.run_command
+    cmd.error!
+    new_resource.updated_by_last_action(true)
   end
+
 end
