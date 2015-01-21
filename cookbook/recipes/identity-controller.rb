@@ -18,7 +18,7 @@ template '/etc/keystone/keystone.conf' do
   :verbose => node['openstack']['logging']['verbose'],
   :debug => node['openstack']['logging']['debug']
   )
-  action :run
+  action :create
   notifies :run, 'bash[create generic certificates]', :immediately
   notifies :run, 'execute[db_sync]', :immediately
   notifies :run, 'execute[use cron to periodically purge expired tokens]', :immediately
