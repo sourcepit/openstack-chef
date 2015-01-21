@@ -6,6 +6,8 @@ attribute :auth_uri, kind_of: String
 attribute :admin_tenant, kind_of: String
 attribute :admin_user, kind_of: String
 attribute :admin_password, kind_of: String
+# or
+attribute :admin_token, kind_of: String
 
 # create_user
 attribute :user, kind_of: String

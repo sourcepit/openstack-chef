@@ -1,10 +1,17 @@
 def get_admin_env(resource)
-  {
-    'OS_TENANT_NAME' => resource.admin_tenant,
-    'OS_USERNAME' => resource.admin_user,
-    'OS_PASSWORD' => resource.admin_password,
-    'OS_AUTH_URL' => resource.auth_uri
-  }
+  if (resource.admin_token.nil? or resource.admin_token.empty?)
+    {
+      'OS_TENANT_NAME' => resource.admin_tenant,
+      'OS_USERNAME' => resource.admin_user,
+      'OS_PASSWORD' => resource.admin_password,
+      'OS_AUTH_URL' => resource.auth_uri
+    }
+  else
+    {
+      'OS_SERVICE_ENDPOINT' => resource.auth_uri,
+      'OS_SERVICE_TOKEN' => resource.admin_token,
+    }
+  end
 end
 
 def get_user_env(resource)
