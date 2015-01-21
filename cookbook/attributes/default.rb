@@ -19,9 +19,15 @@ default['rabbitmq']['password'] = ''
 default['openstack']['logging']['verbose'] = 'false'
 default['openstack']['logging']['debug'] = 'false'
   
+default['openstack']['rabbitmq']['host'] = node['rabbitmq']['bind_address']
+default['openstack']['rabbitmq']['user'] = node['rabbitmq']['user']
+default['openstack']['rabbitmq']['password'] = node['rabbitmq']['password']
+  
 default['openstack']['controller']['ip'] = node['network']['ip_management']
 default['openstack']['controller']['hosts'] = node['network']['hosts_management']
 default['openstack']['controller']['host'] = node['openstack']['controller']['hosts'][0]
+  
+default['openstack']['is_controller'] = node['openstack']['controller']['ip'] == node['network']['ip_management']
 
 default['openstack']['admin']['tenant'] = 'admin'  
 default['openstack']['admin']['user'] = 'admin'
@@ -42,4 +48,9 @@ default['openstack']['image']['db']['user'] = node['openstack']['db']['user']
 default['openstack']['image']['db']['password'] = node['openstack']['db']['password']
 default['openstack']['image']['service']['user'] = node['openstack']['service']['user']
 default['openstack']['image']['service']['password'] = node['openstack']['service']['password']
+  
+default['openstack']['compute']['db']['user'] = node['openstack']['db']['user']
+default['openstack']['compute']['db']['password'] = node['openstack']['db']['password']
+default['openstack']['compute']['service']['user'] = node['openstack']['service']['user']
+default['openstack']['compute']['service']['password'] = node['openstack']['service']['password']
 

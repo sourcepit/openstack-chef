@@ -8,7 +8,7 @@ connection=<%= @db_url %>
 [keystone_authtoken]
 auth_uri=<%= @keystone_auth_uri %>
 identity_uri=<%= @keystone_identity_uri %>
-admin_tenant_name=service
+admin_tenant_name=<%= @service_tenant %>
 admin_user=<%= @service_user %>
 admin_password=<%= @service_password %>
  

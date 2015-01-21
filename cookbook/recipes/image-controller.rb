@@ -44,7 +44,8 @@ template '/etc/glance/glance-api.conf' do
   :debug => node['openstack']['logging']['debug'],
   :keystone_auth_uri => "http://#{node['openstack']['controller']['host']}:5000/v2.0",
   :keystone_identity_uri => "http://#{node['openstack']['controller']['host']}:35357",
-  :service_user => "glance",
+  :service_tenant => node['openstack']['service']['tenant'],
+  :service_user => node['openstack']['image']['service']['user'],
   :service_password => node['openstack']['image']['service']['password']
   )
   action :create
@@ -58,7 +59,8 @@ template '/etc/glance/glance-registry.conf' do
   :debug => node['openstack']['logging']['debug'],
   :keystone_auth_uri => "http://#{node['openstack']['controller']['host']}:5000/v2.0",
   :keystone_identity_uri => "http://#{node['openstack']['controller']['host']}:35357",
-  :service_user => "glance",
+  :service_tenant => node['openstack']['service']['tenant'],
+  :service_user => node['openstack']['image']['service']['user'],
   :service_password => node['openstack']['image']['service']['password']
   )
   action :create
