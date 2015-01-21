@@ -1,3 +1,13 @@
+auth_uri = "http://#{node['openstack']['controller']['host']}:35357/v2.0"
+
+admin_tenant = node['openstack']['admin']['tenant']
+admin_user = node['openstack']['admin']['user']
+admin_password = node['openstack']['admin']['password']
+
+service_tenant = node['openstack']['service']['tenant']
+service_user = node['openstack']['image']['service']['user']
+service_password = node['openstack']['image']['service']['password']
+
 execute 'create_db' do
   command create_create_db_cmd(node['mariadb']['root_password'], "glance", node['openstack']['image']['db']['user'], node['openstack']['image']['db']['password'])
   action :run
@@ -18,16 +28,30 @@ end
   end
 end
 
-openstack_identity 'create glance service user' do
-  auth_uri "http://#{node['openstack']['controller']['host']}:35357/v2.0"
-  admin_tenant "admin"
-  admin_user node['openstack']['admin']['user']
-  admin_password node['openstack']['admin']['password']
+openstack_identity "create image service user and endpoint" do
+  auth_uri auth_uri
+  admin_tenant admin_tenant
+  admin_user admin_user
+  admin_password admin_password
+
+  # create_user
+  user service_user
+  password service_password
+
+  # user_role_add
+  tenant service_tenant
+  role 'admin'
   
-  user "glance"
-  password node['openstack']['image']['service']['password']
+  # service_create
+  service_name 'glance'
+  service_type 'image'
+  service_description 'OpenStack Image Service'
   
-  action :create_user
+  # endpoint_create
+  endpoint_url "http://#{node['openstack']['controller']['host']}:9292"
+  endpoint_region 'regionOne'
+
+  action [:create_user, :user_role_add, :service_create, :endpoint_create]
 end
 
 bash 'create service endpoint' do

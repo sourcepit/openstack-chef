@@ -17,24 +17,33 @@ def get_user_env(resource)
 end
 
 action :create_user do
-  begin
-    bash 'create_user' do
-      code <<-EOH
+  new_resource.updated_by_last_action(false)
+
+  bash 'keystone user-create' do
+    code <<-EOH
         #{get_admin_env(new_resource)}
         keystone --insecure user-create --name #{new_resource.user} --pass #{new_resource.password} 
-      EOH
-      action :run
-      not_if <<-EOH
+    EOH
+    action :run
+    notifies :run, 'ruby_block[notify updated]', :immediately
+    not_if <<-EOH
         #{get_admin_env(new_resource)}
-        keystone --insecure user-get #{new_resource.user} 2> /dev/null | grep "+-"
-      EOH
-    end
+        keystone --insecure user-get #{new_resource.user} 2> /dev/null
+    EOH
   end
+
+  ruby_block "notify updated" do
+    block do
+      new_resource.updated_by_last_action(true)
+    end
+    action :nothing
+  end
+
 end
 
 action :user_role_add do
   begin
-    bash 'user_role_add' do
+    bash 'keystone user-role-add' do
       code <<-EOH
         #{get_admin_env(new_resource)}
         keystone --insecure user-role-add --user #{new_resource.user} --tenant #{new_resource.tenant} --role #{new_resource.role}
@@ -43,6 +52,43 @@ action :user_role_add do
       not_if <<-EOH
         #{get_user_env(new_resource)}
         keystone --insecure user-role-list 2> /dev/null | grep " #{new_resource.role} "
+      EOH
+    end
+  end
+end
+
+action :service_create do
+  begin
+    bash 'keystone service-create' do
+      code <<-EOH
+        #{get_admin_env(new_resource)}
+        keystone --insecure service-create --name #{new_resource.service_name} --type #{new_resource.service_type} --description #{new_resource.service_description}
+      EOH
+      action :run
+      not_if <<-EOH
+        #{get_admin_env(new_resource)}
+        keystone --insecure service-get #{new_resource.service_name} 2> /dev/null
+      EOH
+    end
+  end
+end
+
+action :endpoint_create do
+  begin
+    bash 'keystone endpoint-create' do
+      code <<-EOH
+        #{get_admin_env(new_resource)}
+        keystone endpoint-create \
+          --service-id $(keystone service-list | awk '/ #{new_resource.service_type} / {print $2}') \
+          --publicurl #{new_resource.endpoint_url} \
+          --internalurl #{new_resource.endpoint_url} \
+          --adminurl #{new_resource.endpoint_url} \
+          --region #{new_resource.endpoint_region}
+      EOH
+      action :run
+      not_if <<-EOH
+        #{get_admin_env(new_resource)}
+        keystone --insecure endpoint-get --service #{new_resource.service_type} 2> /dev/null
       EOH
     end
   end
