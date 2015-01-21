@@ -17,9 +17,8 @@ def get_user_env(resource)
 end
 
 action :create_user do
-  new_resource.updated_by_last_action(false)
 
-  bash 'keystone user-create' do
+  b = bash 'keystone user-create' do
     code <<-EOH
         #{get_admin_env(new_resource)}
         keystone --insecure user-create --name #{new_resource.user} --pass #{new_resource.password} 
@@ -32,12 +31,7 @@ action :create_user do
     EOH
   end
 
-  ruby_block "notify updated" do
-    block do
-      new_resource.updated_by_last_action(true)
-    end
-    action :nothing
-  end
+  new_resource.updated_by_last_action(b.updated_by_last_action?)
 
 end
 
