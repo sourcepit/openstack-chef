@@ -1,40 +1,34 @@
 def get_admin_env(resource)
-  <<-EOH
-    export OS_TENANT_NAME=#{resource.admin_tenant}
-    export OS_USERNAME=#{resource.admin_user}
-    export OS_PASSWORD=#{resource.admin_password}
-    export OS_AUTH_URL=#{resource.auth_uri}
-  EOH
+  {
+    'OS_TENANT_NAME' => resource.admin_tenant,
+    'OS_USERNAME' => resource.admin_user,
+    'OS_PASSWORD' => resource.admin_password,
+    'OS_AUTH_URL' => resource.auth_uri
+  }
 end
 
 def get_user_env(resource)
-  <<-EOH
-    export OS_TENANT_NAME=#{resource.tenant}
-    export OS_USERNAME=#{resource.user}
-    export OS_PASSWORD=#{resource.password}
-    export OS_AUTH_URL=#{resource.auth_uri}
-  EOH
+  {
+    'OS_TENANT_NAME' => resource.tenant,
+    'OS_USERNAME' => resource.user,
+    'OS_PASSWORD' => resource.password,
+    'OS_AUTH_URL' => resource.auth_uri
+  }
 end
 
 action :create_user do
 
   cmd = Mixlib::ShellOut.new("keystone --insecure user-get #{new_resource.user}")
-  cmd.environment['OS_TENANT_NAME'] = new_resource.admin_tenant
-  cmd.environment['OS_USERNAME'] = new_resource.admin_user
-  cmd.environment['OS_PASSWORD'] = new_resource.admin_password
-  cmd.environment['OS_AUTH_URL'] = new_resource.auth_uri
+  cmd.environment = get_admin_env(new_resource)
   cmd.run_command
-  
+
   exists = !cmd.stdout.empty?
 
   if (exists)
     new_resource.updated_by_last_action(false)
   else
     cmd = Mixlib::ShellOut.new("keystone --insecure user-create --name #{new_resource.user} --pass #{new_resource.password}")
-    cmd.environment['OS_TENANT_NAME'] = new_resource.admin_tenant
-    cmd.environment['OS_USERNAME'] = new_resource.admin_user
-    cmd.environment['OS_PASSWORD'] = new_resource.admin_password
-    cmd.environment['OS_AUTH_URL'] = new_resource.auth_uri
+    cmd.environment = get_admin_env(new_resource)
     cmd.run_command
     cmd.error!
     new_resource.updated_by_last_action(true)
