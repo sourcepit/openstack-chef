@@ -7,7 +7,6 @@ end
 %w(openstack-keystone python-keystoneclient).each do |pkg|
   package pkg do
     action :install
-    notifies :create, 'template[/etc/keystone/keystone.conf]', :immediately
   end
 end
 
@@ -19,14 +18,10 @@ template '/etc/keystone/keystone.conf' do
   :verbose => node['openstack']['logging']['verbose'],
   :debug => node['openstack']['logging']['debug']
   )
-  action :nothing
+  action :run
   notifies :run, 'bash[create generic certificates]', :immediately
   notifies :run, 'execute[db_sync]', :immediately
-  notifies :enable, 'service[openstack-keystone]', :immediately
-  notifies :start, 'service[openstack-keystone]', :immediately
   notifies :run, 'execute[use cron to periodically purge expired tokens]', :immediately
-  notifies :run, 'bash[create admin and service tenants]', :immediately
-  notifies :run, 'bash[create the service entity and API endpoints]', :immediately
 end
 
 bash 'create generic certificates' do
@@ -44,44 +39,62 @@ execute 'db_sync' do
   action :nothing
 end
 
-service 'openstack-keystone' do
-  supports status: true, restart: true
-  action :nothing
-end
-
 execute 'use cron to periodically purge expired tokens' do
   command "(crontab -l -u keystone 2>&1 | grep -q token_flush) || echo '@hourly /usr/bin/keystone-manage token_flush >/var/log/keystone/keystone-tokenflush.log 2>&1' >> /var/spool/cron/keystone"
   action :nothing
 end
 
-bash 'create admin and service tenants' do
-  code <<-EOH
-export OS_SERVICE_TOKEN=#{node['openstack']['identity']['admin_token']}
-export OS_SERVICE_ENDPOINT=http://#{node['openstack']['controller']['host']}:35357/v2.0
-
-keystone tenant-create --name admin --description "Admin Tenant"
-keystone user-create --name #{node['openstack']['admin']['user']} --pass #{node['openstack']['admin']['password']} --email #{node['openstack']['admin']['email']}
-keystone role-create --name admin
-keystone user-role-add --user #{node['openstack']['admin']['user']} --tenant admin --role admin
-
-keystone tenant-create --name service --description "Service Tenant"
-  EOH
-  action :nothing
+service 'openstack-keystone' do
+  supports status: true, restart: true
+  action [:enable, :start]
 end
 
-bash 'create the service entity and API endpoints' do
-  code <<-EOH
-export OS_SERVICE_TOKEN=#{node['openstack']['identity']['admin_token']}
-export OS_SERVICE_ENDPOINT=http://#{node['openstack']['controller']['host']}:35357/v2.0
-  
-keystone service-create --name keystone --type identity --description "OpenStack Identity"
-    
-keystone endpoint-create \
-  --service-id $(keystone service-list | awk '/ identity / {print $2}') \
-  --publicurl http://#{node['openstack']['controller']['host']}:5000/v2.0 \
-  --internalurl http://#{node['openstack']['controller']['host']}:5000/v2.0 \
-  --adminurl http://#{node['openstack']['controller']['host']}:35357/v2.0 \
-  --region regionOne
-  EOH
-  action :nothing
+openstack_identity "create admin tenant, user and role" do
+  auth_uri "http://#{node['openstack']['controller']['host']}:35357/v2.0"
+  admin_token node['openstack']['identity']['admin_token']
+
+  # tenant_create
+  tenant_name node['openstack']['admin']['tenant']
+  tenant_description "Admin Tenant"
+
+  # user_create
+  user node['openstack']['admin']['user']
+  password node['openstack']['admin']['password']
+
+  # role_create, user_role_add
+  role 'admin'
+
+  action [:tenant_create, :user_create, :role_create, :user_role_add]
+end
+
+openstack_identity "create service tenant" do
+  auth_uri "http://#{node['openstack']['controller']['host']}:35357/v2.0"
+  admin_tenant node['openstack']['admin']['tenant']
+  admin_user node['openstack']['admin']['user']
+  admin_password anode['openstack']['admin']['password']
+
+  # tenant_create
+  tenant_name node['openstack']['service']['tenant']
+  tenant_description "Service Tenant"
+
+  action [:tenant_create]
+end
+
+openstack_identity "create identity service and endpoint" do
+  auth_uri "http://#{node['openstack']['controller']['host']}:35357/v2.0"
+  admin_tenant node['openstack']['admin']['tenant']
+  admin_user node['openstack']['admin']['user']
+  admin_password anode['openstack']['admin']['password']
+
+  # service_create
+  service_name 'keystone'
+  service_type 'identity'
+  service_description 'OpenStack Identity Service'
+
+  # endpoint_create
+  endpoint_url "http://#{node['openstack']['controller']['host']}:5000/v2.0"
+  endpoint_admin_url "http://#{node['openstack']['controller']['host']}:35357/v2.0"
+  endpoint_region 'regionOne'
+
+  action [:service_create, :endpoint_create]
 end

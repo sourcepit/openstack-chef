@@ -16,12 +16,12 @@ openstack_identity "create image service user and endpoint" do
   admin_user node['openstack']['admin']['user']
   admin_password anode['openstack']['admin']['password']
 
-  # create_user
+  # user_create
   user node['openstack']['image']['service']['user']
   password node['openstack']['image']['service']['password']
 
   # user_role_add
-  tenant node['openstack']['service']['tenant']
+  tenant_name node['openstack']['service']['tenant']
   role 'admin'
 
   # service_create
@@ -33,7 +33,7 @@ openstack_identity "create image service user and endpoint" do
   endpoint_url "http://#{node['openstack']['controller']['host']}:9292"
   endpoint_region 'regionOne'
 
-  action [:create_user, :user_role_add, :service_create, :endpoint_create]
+  action [:user_create, :user_role_add, :service_create, :endpoint_create]
 end
 
 template '/etc/glance/glance-api.conf' do
