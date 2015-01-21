@@ -87,7 +87,7 @@ action :endpoint_create do
   if (exists)
     new_resource.updated_by_last_action(false)
   else
-    cmdStr <<-eos
+    cmdStr = <<-eos
       keystone endpoint-create \
         --service-id $(keystone service-list | awk '/ #{new_resource.service_type} / {print $2}') \
         --publicurl #{new_resource.endpoint_url} \
