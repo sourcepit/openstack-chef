@@ -24,7 +24,6 @@ action :create_user do
         keystone --insecure user-create --name #{new_resource.user} --pass #{new_resource.password} 
     EOH
     action :run
-    notifies :run, 'ruby_block[notify updated]', :immediately
     not_if <<-EOH
         #{get_admin_env(new_resource)}
         keystone --insecure user-get #{new_resource.user} 2> /dev/null
