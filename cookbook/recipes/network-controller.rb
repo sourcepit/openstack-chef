@@ -81,8 +81,8 @@ end
 template '/etc/neutron/plugins/ml2/ml2_conf.ini' do
   source 'ml2_conf.ini.erb'
   variables(
-  :is_network_node => default['openstack']['is_network_node'],
-  :is_compute_node => default['openstack']['is_compute_node'],
+  :is_network_node => node['openstack']['is_network_node'],
+  :is_compute_node => node['openstack']['is_compute_node'],
   :local_ip=> node['network']['ip_tunnel']
   )
   action :create
