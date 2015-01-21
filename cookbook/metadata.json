@@ -2,6 +2,7 @@
 	"name": "openstack",
 	"version": "0.1.0",
 	"dependencies": {
-		"yum": ">= 3.5.1"
+		"yum": ">= 3.5.1",
+		"yum-epel": ">= 0.5.3"
 	}
 }
