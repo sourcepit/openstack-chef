@@ -62,21 +62,25 @@ end
 execute 'sync compute db' do
   command "su -s /bin/sh -c 'nova-manage db sync' nova"
   action :run
+  subscribes :restart, 'template[/etc/nova/nova.conf]'
 end
 
 service 'openstack-nova-api' do
   supports status: true, restart: true
   action [:enable, :start]
+  subscribes :restart, 'template[/etc/nova/nova.conf]'
 end
 
 service 'openstack-nova-cert' do
   supports status: true, restart: true
   action [:enable, :start]
+  subscribes :restart, 'template[/etc/nova/nova.conf]'
 end
 
 service 'openstack-nova-consoleauth' do
   supports status: true, restart: true
   action [:enable, :start]
+  subscribes :restart, 'template[/etc/nova/nova.conf]'
 end
 
 service 'openstack-nova-scheduler' do
@@ -87,9 +91,11 @@ end
 service 'openstack-nova-conductor' do
   supports status: true, restart: true
   action [:enable, :start]
+  subscribes :restart, 'template[/etc/nova/nova.conf]'
 end
 
 service 'openstack-nova-novncproxy' do
   supports status: true, restart: true
   action [:enable, :start]
+  subscribes :restart, 'template[/etc/nova/nova.conf]'
 end
