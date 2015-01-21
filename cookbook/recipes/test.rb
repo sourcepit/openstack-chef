@@ -15,6 +15,9 @@ openstack_identity "create service user '#{service_user}'" do
 
   user service_user
   password service_password
+  
+  tenant 'service'
+  role 'admin'
 
-  action :create_user
+  action [:create_user, user_role_add]
 end
