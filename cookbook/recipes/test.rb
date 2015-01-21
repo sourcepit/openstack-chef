@@ -14,17 +14,17 @@ openstack_identity "create service user '#{service_user}'" do
   admin_password admin_password
 
   # create_user
-  user "foo"
-  password "foo"
+  user "bar"
+  password "bar"
 
   # user_role_add
-  tenant "foo"
+  tenant "service"
   role 'admin'
   
   # service_create
-  service_name 'foo'
-  service_type 'foo'
-  service_description 'OpenStack Foo Service'
+  service_name 'bar'
+  service_type 'bar'
+  service_description 'OpenStack bar Service'
   
   # endpoint_create
   endpoint_url "http://#{node['openstack']['controller']['host']}:9292"
@@ -32,12 +32,12 @@ openstack_identity "create service user '#{service_user}'" do
 
   action [:create_user, :user_role_add, :service_create, :endpoint_create]
   
-  notifies :run, 'ruby_block[foo]', :immediately
+  notifies :run, 'ruby_block[bar]', :immediately
 end
 
-ruby_block "foo" do
+ruby_block "bar" do
   block do
-    puts "foo"
+    puts "bar"
   end
   action :nothing
 end
