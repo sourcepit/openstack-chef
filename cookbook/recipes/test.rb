@@ -20,4 +20,13 @@ openstack_identity "create service user '#{service_user}'" do
   role 'admin'
 
   action :create_user
+  
+  notifies :run, 'ruby_block[foo]', :immediately
+end
+
+ruby_block "foo" do
+  block do
+    puts "foo"
+  end
+  action :nothing
 end
