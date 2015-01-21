@@ -1,9 +1,9 @@
 def get_env(resource)
   <<-EOH
-    OS_TENANT_NAME=#{resource.admin_tenant}
-    OS_USERNAME=#{resource.admin_user}
-    OS_PASSWORD=#{resource.admin_password}
-    OS_AUTH_URL=#{resource.auth_uri}
+    export OS_TENANT_NAME=#{resource.admin_tenant}
+    export OS_USERNAME=#{resource.admin_user}
+    export OS_PASSWORD=#{resource.admin_password}
+    export OS_AUTH_URL=#{resource.auth_uri}
   EOH
 end
 
