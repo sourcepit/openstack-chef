@@ -81,3 +81,20 @@ template '/etc/cinder/cinder.conf' do
   )
   action :create
 end
+
+execute 'sync volume db' do
+  command 'su -s /bin/sh -c "cinder-manage db sync" cinder'
+  action :run
+end
+
+service 'openstack-cinder-api' do
+  supports status: true, restart: true
+  action [:enable, :start]
+  subscribes :restart, 'template[/etc/cinder/cinder.conf]'
+end
+
+service 'openstack-cinder-scheduler' do
+  supports status: true, restart: true
+  action [:enable, :start]
+  subscribes :restart, 'template[/etc/cinder/cinder.conf]'
+end
