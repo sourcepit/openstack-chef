@@ -1,6 +1,12 @@
-execute 'create identity db' do
-  command create_create_db_cmd(node['mariadb']['root_password'], "keystone", node['openstack']['identity']['db']['user'], node['openstack']['identity']['db']['password'])
-  action :run
+openstack_database 'create identity db' do
+  admin_password node['mariadb']['root_password']
+  # create_db
+  db_name 'keystone'
+  # grant_privileges
+  user  node['openstack']['identity']['db']['user']
+  password  node['openstack']['identity']['db']['password']
+
+  action [:create_db, :grant_privileges]
   notifies :restart, 'service[mariadb]', :immediately
 end
 

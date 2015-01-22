@@ -1,6 +1,12 @@
-execute 'create network db' do
-  command create_create_db_cmd(node['mariadb']['root_password'], "neutron", node['openstack']['network']['db']['user'], node['openstack']['network']['db']['password'])
-  action :run
+openstack_database 'create network db' do
+  admin_password node['mariadb']['root_password']
+  # create_db
+  db_name 'neutron'
+  # grant_privileges
+  user  node['openstack']['network']['db']['user']
+  password  node['openstack']['network']['db']['password']
+
+  action [:create_db, :grant_privileges]
   notifies :restart, 'service[mariadb]', :immediately
 end
 

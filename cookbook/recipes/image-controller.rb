@@ -1,6 +1,12 @@
-execute 'create image db' do
-  command create_create_db_cmd(node['mariadb']['root_password'], "glance", node['openstack']['image']['db']['user'], node['openstack']['image']['db']['password'])
-  action :run
+openstack_database 'create image db' do
+  admin_password node['mariadb']['root_password']
+  # create_db
+  db_name 'glance'
+  # grant_privileges
+  user  node['openstack']['image']['db']['user']
+  password  node['openstack']['image']['db']['password']
+
+  action [:create_db, :grant_privileges]
   notifies :restart, 'service[mariadb]', :immediately
 end
 

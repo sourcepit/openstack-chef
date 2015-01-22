@@ -1,6 +1,12 @@
-execute 'create compute db' do
-  command create_create_db_cmd(node['mariadb']['root_password'], "nova", node['openstack']['compute']['db']['user'], node['openstack']['compute']['db']['password'])
-  action :run
+openstack_database 'create compute db' do
+  admin_password node['mariadb']['root_password']
+  # create_db
+  db_name 'nova'
+  # grant_privileges
+  user  node['openstack']['compute']['db']['user']
+  password  node['openstack']['compute']['db']['password']
+
+  action [:create_db, :grant_privileges]
   notifies :restart, 'service[mariadb]', :immediately
 end
 
