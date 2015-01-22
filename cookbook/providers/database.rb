@@ -31,7 +31,7 @@ action :grant_privileges do
   new_resource.hosts.each do |host|
     result = query(new_resource.admin_user, new_resource.admin_password, "select count(*) from mysql.db where db='#{new_resource.db_name}' and user='#{new_resource.user}' and host='#{host}';")
     if (result[0]['count(*)'] == '0')
-      cmd = Mixlib::ShellOut.new(mysql_exec(new_resource.admin_user, new_resource.admin_password, "GRANT ALL PRIVILEGES ON #{new_resource.db_name}.* TO '#{new_resource.user}'@'#{host}' IDENTIFIED BY '#{new_resource.passwords}';"))
+      cmd = Mixlib::ShellOut.new(mysql_exec(new_resource.admin_user, new_resource.admin_password, "GRANT ALL PRIVILEGES ON #{new_resource.db_name}.* TO '#{new_resource.user}'@'#{host}' IDENTIFIED BY '#{new_resource.password}';"))
       cmd.run_command
       cmd.error!
       new_resource.updated_by_last_action(true)
