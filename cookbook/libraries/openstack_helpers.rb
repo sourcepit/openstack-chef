@@ -9,7 +9,7 @@ module Openstack
     end
 
     def query(admin_user, admin_password, query)
-      cmd = Mixlib::ShellOut.new( admin_user, admin_password, mysql_exec(query))
+      cmd = Mixlib::ShellOut.new(mysql_exec(admin_user, admin_password,query))
       cmd.run_command
       cmd.error!
       prettytable_to_array(cmd.stdout)
@@ -28,7 +28,7 @@ module Openstack
     end
 
     def is_db_empty(admin_user, admin_password, db_name)
-      result = query("SELECT count(*) FROM information_schema.tables WHERE table_type='BASE TABLE' AND table_schema='#{db_name}';")
+      result = query(admin_user, admin_password, "SELECT count(*) FROM information_schema.tables WHERE table_type='BASE TABLE' AND table_schema='#{db_name}';")
       result.empty?
     end
 
