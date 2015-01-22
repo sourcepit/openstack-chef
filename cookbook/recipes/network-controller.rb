@@ -62,28 +62,28 @@ end
 template '/etc/neutron/neutron.conf' do
   source 'neutron.conf.erb'
   variables(
-  :verbose => node['openstack']['logging']['verbose'],
-  :debug => node['openstack']['logging']['debug'],
-  # rabbitmq
-  :rabbit_host => node['openstack']['rabbitmq']['host'],
-  :rabbit_userid => node['openstack']['rabbitmq']['user'],
-  :rabbit_password => node['openstack']['rabbitmq']['password'],
-  # nova
-  :nova_url => "http://#{node['openstack']['controller']['host']}:8774/v2",
-  :nova_admin_auth_url => "http://#{node['openstack']['controller']['host']}:35357/v2.0",
-  :nova_admin_username => node['openstack']['compute']['service']['user'],
-  :nova_admin_tenant_id => lazy {
-    get_tenant_id(node['openstack']['admin']['tenant'], node['openstack']['admin']['user'], node['openstack']['admin']['password'], "http://#{node['openstack']['controller']['host']}:35357/v2.0", node['openstack']['service']['tenant'])
-  },
-  :nova_admin_password => node['openstack']['compute']['service']['password'],
-  # db
-  :db_url => create_db_url(node['mariadb']['host'], "neutron", node['openstack']['network']['db']['user'], node['openstack']['network']['db']['password']),
-  # keystone
-  :keystone_auth_uri => "http://#{node['openstack']['controller']['host']}:5000/v2.0",
-  :keystone_identity_uri => "http://#{node['openstack']['controller']['host']}:35357",
-  :service_tenant => node['openstack']['service']['tenant'],
-  :service_user => node['openstack']['network']['service']['user'],
-  :service_password => node['openstack']['network']['service']['password']
+  lazy {{
+      :verbose => node['openstack']['logging']['verbose'],
+      :debug => node['openstack']['logging']['debug'],
+      # rabbitmq
+      :rabbit_host => node['openstack']['rabbitmq']['host'],
+      :rabbit_userid => node['openstack']['rabbitmq']['user'],
+      :rabbit_password => node['openstack']['rabbitmq']['password'],
+      # nova
+      :nova_url => "http://#{node['openstack']['controller']['host']}:8774/v2",
+      :nova_admin_auth_url => "http://#{node['openstack']['controller']['host']}:35357/v2.0",
+      :nova_admin_username => node['openstack']['compute']['service']['user'],
+      :nova_admin_tenant_id =>  get_tenant_id(node['openstack']['admin']['tenant'], node['openstack']['admin']['user'], node['openstack']['admin']['password'], "http://#{node['openstack']['controller']['host']}:35357/v2.0", node['openstack']['service']['tenant']) ,
+      :nova_admin_password => node['openstack']['compute']['service']['password'],
+      # db
+      :db_url => create_db_url(node['mariadb']['host'], "neutron", node['openstack']['network']['db']['user'], node['openstack']['network']['db']['password']),
+      # keystone
+      :keystone_auth_uri => "http://#{node['openstack']['controller']['host']}:5000/v2.0",
+      :keystone_identity_uri => "http://#{node['openstack']['controller']['host']}:35357",
+      :service_tenant => node['openstack']['service']['tenant'],
+      :service_user => node['openstack']['network']['service']['user'],
+      :service_password => node['openstack']['network']['service']['password']
+    }}
   )
   action :create
 end
