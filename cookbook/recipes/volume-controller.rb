@@ -79,7 +79,7 @@ template '/etc/cinder/cinder.conf' do
   :rabbit_userid => node['openstack']['rabbitmq']['user'],
   :rabbit_password => node['openstack']['rabbitmq']['password'],
   :my_ip => node['network']['ip_management'],
-  :db_url => create_db_url(node['mariadb']['host'], "nova", node['openstack']['volume']['db']['user'], node['openstack']['volume']['db']['password']),
+  :db_url => create_db_url(node['mariadb']['host'], "cinder", node['openstack']['volume']['db']['user'], node['openstack']['volume']['db']['password']),
   :glance_host => node['openstack']['controller']['host'],
   :keystone_auth_uri => "http://#{node['openstack']['controller']['host']}:5000/v2.0",
   :keystone_identity_uri => "http://#{node['openstack']['controller']['host']}:35357",
@@ -91,12 +91,12 @@ template '/etc/cinder/cinder.conf' do
 end
 
 # returns error if db is emty "Error: Upgrade DB using Essex release first."
-unless is_db_empty('root', node['mariadb']['root_password'], 'cinder')
+#unless is_db_empty('root', node['mariadb']['root_password'], 'cinder')
   execute 'sync volume db' do
     command 'su -s /bin/sh -c "cinder-manage db sync" cinder'
     action :run
   end
-end
+#end
 
 service 'openstack-cinder-api' do
   supports status: true, restart: true
