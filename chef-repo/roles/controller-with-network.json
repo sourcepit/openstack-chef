@@ -21,7 +21,8 @@
 		"recipe[openstack::identity-controller]",
 		"recipe[openstack::image-controller]",
 		"recipe[openstack::compute-controller]",
-		"recipe[openstack::network-controller]"
+		"recipe[openstack::network-controller]",
+		"recipe[openstack::dashboard-controller]"
 	],
 
 	"env_run_lists": 
