@@ -1,5 +1,5 @@
 execute 'create volume db' do
-  command create_create_db_cmd(node['mariadb']['root_password'], "cinder", node['openstack']['volume ']['db']['user'], node['openstack']['volume ']['db']['password'])
+  command create_create_db_cmd(node['mariadb']['root_password'], "cinder", node['openstack']['volume']['db']['user'], node['openstack']['volume']['db']['password'])
   action :run
   notifies :restart, 'service[mariadb]', :immediately
 end
