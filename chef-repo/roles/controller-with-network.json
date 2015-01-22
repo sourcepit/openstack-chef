@@ -22,7 +22,8 @@
 		"recipe[openstack::image-controller]",
 		"recipe[openstack::compute-controller]",
 		"recipe[openstack::network-controller]",
-		"recipe[openstack::dashboard-controller]"
+		"recipe[openstack::dashboard-controller]",
+		"recipe[openstack::volume-controller]"
 	],
 
 	"env_run_lists": 
