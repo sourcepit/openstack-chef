@@ -1,6 +1,14 @@
-execute 'create volume db' do
-  command create_create_db_cmd(node['mariadb']['root_password'], "cinder", node['openstack']['volume']['db']['user'], node['openstack']['volume']['db']['password'])
-  action :run
+openstack_database 'create volume db' do
+  admin_password node['mariadb']['root_password']
+
+  # create_db
+  db_name 'cinder'
+
+  # grant_privileges
+  user  node['openstack']['volume']['db']['user']
+  password  node['openstack']['volume']['db']['password']
+
+  action [:create_db, :grant_privileges]
   notifies :restart, 'service[mariadb]', :immediately
 end
 
@@ -82,9 +90,12 @@ template '/etc/cinder/cinder.conf' do
   action :create
 end
 
-execute 'sync volume db' do
-  command 'su -s /bin/sh -c "cinder-manage db sync" cinder'
-  action :run
+# returns error if db is emty "Error: Upgrade DB using Essex release first."
+unless is_db_empty('root', node['mariadb']['root_password'], 'cinder')
+  execute 'sync volume db' do
+    command 'su -s /bin/sh -c "cinder-manage db sync" cinder'
+    action :run
+  end
 end
 
 service 'openstack-cinder-api' do
