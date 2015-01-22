@@ -1,7 +1,7 @@
 action :create_db do
   result = query(new_resource.admin_user, new_resource.admin_password, "SELECT schema_name FROM information_schema.schemata WHERE schema_name='#{new_resource.db_name}';")
   if (result.empty?)
-    cmd = Mixlib::ShellOut.new(mysql_exec(new_resource.admin_user, new_resource.admin_password, "CREATE DATABASE '#{new_resource.db_name}';"))
+    cmd = Mixlib::ShellOut.new(mysql_exec(new_resource.admin_user, new_resource.admin_password, "CREATE DATABASE #{new_resource.db_name};"))
     cmd.run_command
     cmd.error!
     new_resource.updated_by_last_action(true)
