@@ -7,7 +7,7 @@ end
 template '/etc/openstack-dashboard/local_settings' do
   source 'local_settings.erb'
   variables(
-  :debug => node['openstack']['logging']['debug'],
+  :debug => node['openstack']['logging']['debug'] ? 'True' : 'False',
   :openstack_host => node['openstack']['controller']['host'],
   :time_zone => 'UTC'
   )
