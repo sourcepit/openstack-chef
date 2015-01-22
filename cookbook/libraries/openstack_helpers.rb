@@ -5,11 +5,11 @@ module Openstack
       unless admin_password.nil? or admin_password.empty?
         sql += '-p' + admin_password + ' '
       end
-      sql += '--skip-column-names -e "'+ cmd + '"'
+      sql += '--table -e "'+ cmd + '"'
     end
 
     def query(admin_user, admin_password, query)
-      cmd = Mixlib::ShellOut.new(mysql_exec(admin_user, admin_password,query))
+      cmd = Mixlib::ShellOut.new(mysql_exec(admin_user, admin_password, query))
       cmd.run_command
       cmd.error!
       prettytable_to_array(cmd.stdout)
@@ -29,7 +29,7 @@ module Openstack
 
     def is_db_empty(admin_user, admin_password, db_name)
       result = query(admin_user, admin_password, "SELECT count(*) FROM information_schema.tables WHERE table_type='BASE TABLE' AND table_schema='#{db_name}';")
-      result.empty?
+      result[0]['count(*)'] == '0'
     end
 
     def create_db_url(host, database, user, password)
