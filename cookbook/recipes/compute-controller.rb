@@ -91,6 +91,7 @@ end
 service 'openstack-nova-scheduler' do
   supports status: true, restart: true
   action [:enable, :start]
+  subscribes :restart, 'template[/etc/nova/nova.conf]'
 end
 
 service 'openstack-nova-conductor' do
