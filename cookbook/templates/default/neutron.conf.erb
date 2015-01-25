@@ -9,6 +9,7 @@ rabbit_password=<%= @rabbit_password %>
 
 auth_strategy=keystone
 
+<% if @is_controller_node %>
 notify_nova_on_port_status_changes=True
 notify_nova_on_port_data_changes=True
 nova_url=<%= @nova_url %>
@@ -17,14 +18,17 @@ nova_region_name=regionOne
 nova_admin_username=<%= @nova_admin_username %>
 nova_admin_tenant_id=<%= @nova_admin_tenant_id %>
 nova_admin_password=<%= @nova_admin_password %>
+<% end %>
 
 core_plugin=ml2
 service_plugins=router
 allow_overlapping_ips=True
 
 
+<% if @is_controller_node %>
 [database]
 connection=<%= @db_url %>
+<% end %>
 
 
 [keystone_authtoken]

@@ -60,6 +60,7 @@ default['openstack']['neutron']['db']['user'] = node['openstack']['db']['user']
 default['openstack']['neutron']['db']['password'] = node['openstack']['db']['password']
 default['openstack']['neutron']['service']['user'] = node['openstack']['service']['user']
 default['openstack']['neutron']['service']['password'] = node['openstack']['service']['password']
+default['openstack']['neutron']['metadata']['shared_secret'] = 'ccac98a6e7329c213f06'
   
 default['openstack']['cinder']['db']['user'] = node['openstack']['db']['user']
 default['openstack']['cinder']['db']['password'] = node['openstack']['db']['password']

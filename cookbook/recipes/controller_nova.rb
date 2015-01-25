@@ -66,7 +66,8 @@ template '/etc/nova/nova.conf' do
   :neutron_admin_auth_url => "http://#{node['openstack']['controller']['host']}:35357/v2.0",
   :neutron_admin_tenant_name => node['openstack']['service']['tenant'],
   :neutron_admin_username => node['openstack']['neutron']['service']['user'],
-  :neutron_admin_password => node['openstack']['neutron']['service']['user']
+  :neutron_admin_password => node['openstack']['neutron']['service']['user'],
+  :metadata_proxy_shared_secret =>  node['openstack']['neutron']['metadata']['shared_secret']
   )
   action :create
 end
