@@ -3,8 +3,8 @@ openstack_database 'create network db' do
   # create_db
   db_name 'neutron'
   # grant_privileges
-  user  node['openstack']['network']['db']['user']
-  password  node['openstack']['network']['db']['password']
+  user  node['openstack']['neutron']['db']['user']
+  password  node['openstack']['neutron']['db']['password']
 
   action [:create_db, :grant_privileges]
   notifies :restart, 'service[mariadb]', :immediately
@@ -17,8 +17,8 @@ openstack_identity "create network service user and endpoint" do
   admin_password node['openstack']['admin']['password']
 
   # user_create
-  user node['openstack']['network']['service']['user']
-  password node['openstack']['network']['service']['password']
+  user node['openstack']['neutron']['service']['user']
+  password node['openstack']['neutron']['service']['password']
 
   # user_role_add
   tenant_name node['openstack']['service']['tenant']
@@ -72,17 +72,17 @@ template '/etc/neutron/neutron.conf' do
       # nova
       :nova_url => "http://#{node['openstack']['controller']['host']}:8774/v2",
       :nova_admin_auth_url => "http://#{node['openstack']['controller']['host']}:35357/v2.0",
-      :nova_admin_username => node['openstack']['compute']['service']['user'],
+      :nova_admin_username => node['openstack']['nova']['service']['user'],
       :nova_admin_tenant_id =>  get_tenant_id(node['openstack']['admin']['tenant'], node['openstack']['admin']['user'], node['openstack']['admin']['password'], "http://#{node['openstack']['controller']['host']}:35357/v2.0", node['openstack']['service']['tenant']) ,
-      :nova_admin_password => node['openstack']['compute']['service']['password'],
+      :nova_admin_password => node['openstack']['nova']['service']['password'],
       # db
-      :db_url => create_db_url(node['mariadb']['host'], "neutron", node['openstack']['network']['db']['user'], node['openstack']['network']['db']['password']),
+      :db_url => create_db_url(node['mariadb']['host'], "neutron", node['openstack']['neutron']['db']['user'], node['openstack']['neutron']['db']['password']),
       # keystone
       :keystone_auth_uri => "http://#{node['openstack']['controller']['host']}:5000/v2.0",
       :keystone_identity_uri => "http://#{node['openstack']['controller']['host']}:35357",
       :service_tenant => node['openstack']['service']['tenant'],
-      :service_user => node['openstack']['network']['service']['user'],
-      :service_password => node['openstack']['network']['service']['password']
+      :service_user => node['openstack']['neutron']['service']['user'],
+      :service_password => node['openstack']['neutron']['service']['password']
     }}
   )
   action :create

@@ -3,8 +3,8 @@ openstack_database 'create compute db' do
   # create_db
   db_name 'nova'
   # grant_privileges
-  user  node['openstack']['compute']['db']['user']
-  password  node['openstack']['compute']['db']['password']
+  user  node['openstack']['nova']['db']['user']
+  password  node['openstack']['nova']['db']['password']
 
   action [:create_db, :grant_privileges]
   notifies :restart, 'service[mariadb]', :immediately
@@ -17,8 +17,8 @@ openstack_identity "create compute service user and endpoint" do
   admin_password node['openstack']['admin']['password']
 
   # user_create
-  user node['openstack']['compute']['service']['user']
-  password node['openstack']['compute']['service']['password']
+  user node['openstack']['nova']['service']['user']
+  password node['openstack']['nova']['service']['password']
 
   # user_role_add
   tenant_name node['openstack']['service']['tenant']
@@ -54,19 +54,19 @@ template '/etc/nova/nova.conf' do
   :vncserver_listen => node['openstack']['is_controller_node'] ? node['network']['ip_management'] : '0.0.0.0',
   :vncserver_proxyclient_address => node['network']['ip_management'],
   :novncproxy_base_url => node['openstack']['is_controller_node'] ? nil : "http://#{node['openstack']['controller']['host']}:6080/vnc_auto.html",
-  :db_url => create_db_url(node['mariadb']['host'], "nova", node['openstack']['compute']['db']['user'], node['openstack']['compute']['db']['password']),
+  :db_url => create_db_url(node['mariadb']['host'], "nova", node['openstack']['nova']['db']['user'], node['openstack']['nova']['db']['password']),
   :glance_host => node['openstack']['controller']['host'],
   :keystone_auth_uri => "http://#{node['openstack']['controller']['host']}:5000/v2.0",
   :keystone_identity_uri => "http://#{node['openstack']['controller']['host']}:35357",
   :service_tenant => node['openstack']['service']['tenant'],
-  :service_user => node['openstack']['compute']['service']['user'],
-  :service_password => node['openstack']['compute']['service']['password'],
+  :service_user => node['openstack']['nova']['service']['user'],
+  :service_password => node['openstack']['nova']['service']['password'],
   # neutron
   :neutron_url => "http://#{node['openstack']['controller']['host']}:9696",
   :neutron_admin_auth_url => "http://#{node['openstack']['controller']['host']}:35357/v2.0",
   :neutron_admin_tenant_name => node['openstack']['service']['tenant'],
-  :neutron_admin_username => node['openstack']['network']['service']['user'],
-  :neutron_admin_password => node['openstack']['network']['service']['user']
+  :neutron_admin_username => node['openstack']['neutron']['service']['user'],
+  :neutron_admin_password => node['openstack']['neutron']['service']['user']
   )
   action :create
 end

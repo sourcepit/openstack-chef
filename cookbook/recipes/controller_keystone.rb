@@ -3,8 +3,8 @@ openstack_database 'create identity db' do
   # create_db
   db_name 'keystone'
   # grant_privileges
-  user  node['openstack']['identity']['db']['user']
-  password  node['openstack']['identity']['db']['password']
+  user  node['openstack']['keystone']['db']['user']
+  password  node['openstack']['keystone']['db']['password']
 
   action [:create_db, :grant_privileges]
   notifies :restart, 'service[mariadb]', :immediately
@@ -19,8 +19,8 @@ end
 template '/etc/keystone/keystone.conf' do
   source 'keystone.conf.erb'
   variables(
-  :db_url => create_db_url(node['mariadb']['host'], "keystone", node['openstack']['identity']['db']['user'], node['openstack']['identity']['db']['password']),
-  :admin_token => node['openstack']['identity']['admin_token'],
+  :db_url => create_db_url(node['mariadb']['host'], "keystone", node['openstack']['keystone']['db']['user'], node['openstack']['keystone']['db']['password']),
+  :admin_token => node['openstack']['keystone']['admin_token'],
   :verbose => node['openstack']['logging']['verbose'],
   :debug => node['openstack']['logging']['debug']
   )
@@ -55,7 +55,7 @@ end
 
 openstack_identity "create admin tenant, user and role" do
   auth_uri "http://#{node['openstack']['controller']['host']}:35357/v2.0"
-  admin_token node['openstack']['identity']['admin_token']
+  admin_token node['openstack']['keystone']['admin_token']
 
   # tenant_create
   tenant_name node['openstack']['admin']['tenant']
@@ -73,7 +73,7 @@ end
 
 openstack_identity "create service tenant" do
   auth_uri "http://#{node['openstack']['controller']['host']}:35357/v2.0"
-  admin_token node['openstack']['identity']['admin_token']
+  admin_token node['openstack']['keystone']['admin_token']
 
   # tenant_create
   tenant_name node['openstack']['service']['tenant']
@@ -84,7 +84,7 @@ end
 
 openstack_identity "create identity service and endpoint" do
   auth_uri "http://#{node['openstack']['controller']['host']}:35357/v2.0"
-  admin_token node['openstack']['identity']['admin_token']
+  admin_token node['openstack']['keystone']['admin_token']
 
   # service_create
   service_name 'keystone'

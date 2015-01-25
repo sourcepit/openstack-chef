@@ -47,3 +47,7 @@ service 'network' do
   ignore_failure true
   action :nothing
 end
+
+template '/etc/hosts' do
+  source 'hosts.erb'
+end

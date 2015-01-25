@@ -3,8 +3,8 @@ openstack_database 'create image db' do
   # create_db
   db_name 'glance'
   # grant_privileges
-  user  node['openstack']['image']['db']['user']
-  password  node['openstack']['image']['db']['password']
+  user  node['openstack']['glance']['db']['user']
+  password  node['openstack']['glance']['db']['password']
 
   action [:create_db, :grant_privileges]
   notifies :restart, 'service[mariadb]', :immediately
@@ -23,8 +23,8 @@ openstack_identity "create image service user and endpoint" do
   admin_password node['openstack']['admin']['password']
 
   # user_create
-  user node['openstack']['image']['service']['user']
-  password node['openstack']['image']['service']['password']
+  user node['openstack']['glance']['service']['user']
+  password node['openstack']['glance']['service']['password']
 
   # user_role_add
   tenant_name node['openstack']['service']['tenant']
@@ -45,14 +45,14 @@ end
 template '/etc/glance/glance-api.conf' do
   source 'glance-api.conf.erb'
   variables(
-  :db_url => create_db_url(node['mariadb']['host'], "glance", node['openstack']['image']['db']['user'], node['openstack']['image']['db']['password']),
+  :db_url => create_db_url(node['mariadb']['host'], "glance", node['openstack']['glance']['db']['user'], node['openstack']['glance']['db']['password']),
   :verbose => node['openstack']['logging']['verbose'],
   :debug => node['openstack']['logging']['debug'],
   :keystone_auth_uri => "http://#{node['openstack']['controller']['host']}:5000/v2.0",
   :keystone_identity_uri => "http://#{node['openstack']['controller']['host']}:35357",
   :service_tenant => node['openstack']['service']['tenant'],
-  :service_user => node['openstack']['image']['service']['user'],
-  :service_password => node['openstack']['image']['service']['password']
+  :service_user => node['openstack']['glance']['service']['user'],
+  :service_password => node['openstack']['glance']['service']['password']
   )
   action :create
 end
@@ -60,14 +60,14 @@ end
 template '/etc/glance/glance-registry.conf' do
   source 'glance-registry.conf.erb'
   variables(
-  :db_url => create_db_url(node['mariadb']['host'], "glance", node['openstack']['image']['db']['user'], node['openstack']['image']['db']['password']),
+  :db_url => create_db_url(node['mariadb']['host'], "glance", node['openstack']['glance']['db']['user'], node['openstack']['glance']['db']['password']),
   :verbose => node['openstack']['logging']['verbose'],
   :debug => node['openstack']['logging']['debug'],
   :keystone_auth_uri => "http://#{node['openstack']['controller']['host']}:5000/v2.0",
   :keystone_identity_uri => "http://#{node['openstack']['controller']['host']}:35357",
   :service_tenant => node['openstack']['service']['tenant'],
-  :service_user => node['openstack']['image']['service']['user'],
-  :service_password => node['openstack']['image']['service']['password']
+  :service_user => node['openstack']['glance']['service']['user'],
+  :service_password => node['openstack']['glance']['service']['password']
   )
   action :create
 end

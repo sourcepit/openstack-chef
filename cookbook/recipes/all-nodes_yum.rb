@@ -11,7 +11,3 @@ end
 package 'openstack-selinux' do
   action :install
 end
-
-template '/etc/hosts' do
-  source 'hosts.erb'
-end

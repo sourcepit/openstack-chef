@@ -42,27 +42,27 @@ default['openstack']['service']['tenant'] = 'service'
 default['openstack']['service']['user'] = 'service'
 default['openstack']['service']['password'] = 'secret'
     
-default['openstack']['identity']['db']['user'] = node['openstack']['db']['user']
-default['openstack']['identity']['db']['password'] = node['openstack']['db']['password']
-default['openstack']['identity']['admin_token'] = '17986b3c37e2b95dcf03'
+default['openstack']['keystone']['db']['user'] = node['openstack']['db']['user']
+default['openstack']['keystone']['db']['password'] = node['openstack']['db']['password']
+default['openstack']['keystone']['admin_token'] = '17986b3c37e2b95dcf03'
   
-default['openstack']['image']['db']['user'] = node['openstack']['db']['user']
-default['openstack']['image']['db']['password'] = node['openstack']['db']['password']
-default['openstack']['image']['service']['user'] = node['openstack']['service']['user']
-default['openstack']['image']['service']['password'] = node['openstack']['service']['password']
+default['openstack']['glance']['db']['user'] = node['openstack']['db']['user']
+default['openstack']['glance']['db']['password'] = node['openstack']['db']['password']
+default['openstack']['glance']['service']['user'] = node['openstack']['service']['user']
+default['openstack']['glance']['service']['password'] = node['openstack']['service']['password']
   
-default['openstack']['compute']['db']['user'] = node['openstack']['db']['user']
-default['openstack']['compute']['db']['password'] = node['openstack']['db']['password']
-default['openstack']['compute']['service']['user'] = node['openstack']['service']['user']
-default['openstack']['compute']['service']['password'] = node['openstack']['service']['password']
+default['openstack']['nova']['db']['user'] = node['openstack']['db']['user']
+default['openstack']['nova']['db']['password'] = node['openstack']['db']['password']
+default['openstack']['nova']['service']['user'] = node['openstack']['service']['user']
+default['openstack']['nova']['service']['password'] = node['openstack']['service']['password']
   
-default['openstack']['network']['db']['user'] = node['openstack']['db']['user']
-default['openstack']['network']['db']['password'] = node['openstack']['db']['password']
-default['openstack']['network']['service']['user'] = node['openstack']['service']['user']
-default['openstack']['network']['service']['password'] = node['openstack']['service']['password']
+default['openstack']['neutron']['db']['user'] = node['openstack']['db']['user']
+default['openstack']['neutron']['db']['password'] = node['openstack']['db']['password']
+default['openstack']['neutron']['service']['user'] = node['openstack']['service']['user']
+default['openstack']['neutron']['service']['password'] = node['openstack']['service']['password']
   
-default['openstack']['volume']['db']['user'] = node['openstack']['db']['user']
-default['openstack']['volume']['db']['password'] = node['openstack']['db']['password']
-default['openstack']['volume']['service']['user'] = node['openstack']['service']['user']
-default['openstack']['volume']['service']['password'] = node['openstack']['service']['password']
+default['openstack']['cinder']['db']['user'] = node['openstack']['db']['user']
+default['openstack']['cinder']['db']['password'] = node['openstack']['db']['password']
+default['openstack']['cinder']['service']['user'] = node['openstack']['service']['user']
+default['openstack']['cinder']['service']['password'] = node['openstack']['service']['password']
 

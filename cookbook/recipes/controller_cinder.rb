@@ -3,8 +3,8 @@ openstack_database 'create volume db' do
   # create_db
   db_name 'cinder'
   # grant_privileges
-  user  node['openstack']['volume']['db']['user']
-  password  node['openstack']['volume']['db']['password']
+  user  node['openstack']['cinder']['db']['user']
+  password  node['openstack']['cinder']['db']['password']
 
   action [:create_db, :grant_privileges]
   notifies :restart, 'service[mariadb]', :immediately
@@ -17,8 +17,8 @@ openstack_identity "create volume user and endpoint" do
   admin_password node['openstack']['admin']['password']
 
   # user_create
-  user node['openstack']['volume']['service']['user']
-  password node['openstack']['volume']['service']['password']
+  user node['openstack']['cinder']['service']['user']
+  password node['openstack']['cinder']['service']['password']
 
   # user_role_add
   tenant_name node['openstack']['service']['tenant']
@@ -43,8 +43,8 @@ openstack_identity "create volumev2 user and endpoint" do
   admin_password node['openstack']['admin']['password']
 
   # user_create
-  user node['openstack']['volume']['service']['user']
-  password node['openstack']['volume']['service']['password']
+  user node['openstack']['cinder']['service']['user']
+  password node['openstack']['cinder']['service']['password']
 
   # user_role_add
   tenant_name node['openstack']['service']['tenant']
@@ -77,13 +77,13 @@ template '/etc/cinder/cinder.conf' do
   :rabbit_userid => node['openstack']['rabbitmq']['user'],
   :rabbit_password => node['openstack']['rabbitmq']['password'],
   :my_ip => node['network']['ip_management'],
-  :db_url => create_db_url(node['mariadb']['host'], "cinder", node['openstack']['volume']['db']['user'], node['openstack']['volume']['db']['password']),
+  :db_url => create_db_url(node['mariadb']['host'], "cinder", node['openstack']['cinder']['db']['user'], node['openstack']['cinder']['db']['password']),
   :glance_host => node['openstack']['controller']['host'],
   :keystone_auth_uri => "http://#{node['openstack']['controller']['host']}:5000/v2.0",
   :keystone_identity_uri => "http://#{node['openstack']['controller']['host']}:35357",
   :service_tenant => node['openstack']['service']['tenant'],
-  :service_user => node['openstack']['volume']['service']['user'],
-  :service_password => node['openstack']['volume']['service']['password']
+  :service_user => node['openstack']['cinder']['service']['user'],
+  :service_password => node['openstack']['cinder']['service']['password']
   )
   action :create
 end

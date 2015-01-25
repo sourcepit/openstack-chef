@@ -14,16 +14,16 @@
 	"chef_type": "role",
 	"run_list": 
 	[
-		"recipe[openstack::network]",
-		"recipe[openstack::common]",
+		"recipe[openstack::all-nodes_network]",
+		"recipe[openstack::all-nodes_yum]",
 		"recipe[openstack::mariadb]",
 		"recipe[openstack::rabbitmq]",
-		"recipe[openstack::identity-controller]",
-		"recipe[openstack::image-controller]",
-		"recipe[openstack::compute-controller]",
-		"recipe[openstack::network-controller]",
-		"recipe[openstack::dashboard-controller]",
-		"recipe[openstack::volume-controller]"
+		"recipe[openstack::controller_keystone]",
+		"recipe[openstack::controller_glance]",
+		"recipe[openstack::controller_nova]",
+		"recipe[openstack::controller_neutron]",
+		"recipe[openstack::controller_horizon]",
+		"recipe[openstack::controller_cinder]"
 	],
 
 	"env_run_lists": 
