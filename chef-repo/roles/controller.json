@@ -6,9 +6,7 @@
 	},
 	"override_attributes": {
 		"network": {
-			"if_management": "enp0s8",
-			"if_tunnel": "enp0s9",
-			"if_external": "enp0s10"
+			"if_management": "enp0s8"
 		}
 	},
 	"chef_type": "role",
@@ -21,7 +19,6 @@
 		"recipe[openstack::controller_glance]",
 		"recipe[openstack::controller_nova]",
 		"recipe[openstack::controller_neutron]",
-		"recipe[openstack::network_neutron]",
 		"recipe[openstack::controller_horizon]",
 		"recipe[openstack::controller_cinder]"
 	],

@@ -7,14 +7,15 @@
 	"override_attributes": {
 		"network": {
 			"if_management": "enp0s8",
-			"if_tunnel": "enp0s9"
+			"if_tunnel": "enp0s9",
+			"if_external": "enp0s10"
 		}
 	},
 	"chef_type": "role",
 	"run_list": [
 		"recipe[openstack::all-nodes_network]",
 		"recipe[openstack::all-nodes_yum]",
-		"recipe[openstack::compute_nova]"
+		"recipe[openstack::network_neutron]"
 	],
 	"env_run_lists": {
 		

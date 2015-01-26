@@ -1,6 +1,6 @@
-default['network']['if_management'] = 'enp0s8'
-default['network']['if_tunnel'] = 'enp0s9'
-default['network']['if_external'] = 'enp0s10'
+default['network']['if_management'] = nil
+default['network']['if_tunnel'] = nil
+default['network']['if_external'] = nil
   
 default['network']['ip_management'] = '10.0.0.11'
 default['network']['ip_tunnel'] = '10.0.1.11'
