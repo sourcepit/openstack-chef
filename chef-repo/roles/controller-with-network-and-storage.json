@@ -1,5 +1,5 @@
 {
-	"name": "controller-with-network",
+	"name": "controller-with-network-and-storage",
 	"json_class": "Chef::Role",
 	"default_attributes": {
 		
@@ -26,7 +26,8 @@
 	"chef_type": "role",
 	"run_list": [
 		"role[controller]",
-		"recipe[openstack::network_neutron]"
+		"recipe[openstack::network_neutron]",
+		"recipe[openstack::storage_cinder]"
 	],
 	"env_run_lists": {
 		

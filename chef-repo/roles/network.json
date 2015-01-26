@@ -1,5 +1,5 @@
 {
-	"name": "controller-with-network",
+	"name": "network",
 	"json_class": "Chef::Role",
 	"default_attributes": {
 		
