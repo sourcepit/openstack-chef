@@ -25,7 +25,10 @@
 		"openstack": {
 			"controller": {
 				"ip": "10.0.0.11",
-				"host": "controller.bosch-si.com"
+				"hosts": [
+					"controller.bosch-si.com",
+					"controller"
+				]
 			}
 		}
 	},
