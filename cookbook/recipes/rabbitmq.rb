@@ -1,8 +1,8 @@
 package 'rabbitmq-server' do
   action :upgrade
-  notifies :enable, 'service[rabbitmq-server]'
-  notifies :start, 'service[rabbitmq-server]'
-  notifies :run, 'execute[init user]'
+  notifies :enable, 'service[rabbitmq-server]', :immediately
+  notifies :start, 'service[rabbitmq-server]', :immediately
+  notifies :run, 'execute[init user]', :immediately
 end
 
 execute 'init user' do
@@ -19,7 +19,7 @@ template '/etc/rabbitmq/rabbitmq-env.conf' do
   owner 'root'
   group 'root'
   mode '0644'
-  notifies :restart, 'service[rabbitmq-server]'
+  notifies :restart, 'service[rabbitmq-server]', :immediately
 end
 
 service 'rabbitmq-server' do

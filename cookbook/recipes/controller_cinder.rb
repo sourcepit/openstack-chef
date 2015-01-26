@@ -7,7 +7,7 @@ openstack_database 'create volume db' do
   password  node['openstack']['cinder']['db']['password']
 
   action [:create_db, :grant_privileges]
-  notifies :restart, 'service[mariadb]'
+  notifies :restart, 'service[mariadb]', :immediately
 end
 
 openstack_identity "create volume user and endpoint" do

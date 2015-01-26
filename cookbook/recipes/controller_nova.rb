@@ -7,7 +7,7 @@ openstack_database 'create compute db' do
   password  node['openstack']['nova']['db']['password']
 
   action [:create_db, :grant_privileges]
-  notifies :restart, 'service[mariadb]'
+  notifies :restart, 'service[mariadb]', :immediately
 end
 
 openstack_identity "create compute service user and endpoint" do

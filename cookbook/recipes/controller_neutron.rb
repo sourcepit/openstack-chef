@@ -7,7 +7,7 @@ openstack_database 'create network db' do
   password  node['openstack']['neutron']['db']['password']
 
   action [:create_db, :grant_privileges]
-  notifies :restart, 'service[mariadb]'
+  notifies :restart, 'service[mariadb]', :immediately
 end
 
 openstack_identity "create network service user and endpoint" do

@@ -7,7 +7,7 @@ openstack_database 'create image db' do
   password  node['openstack']['glance']['db']['password']
 
   action [:create_db, :grant_privileges]
-  notifies :restart, 'service[mariadb]'
+  notifies :restart, 'service[mariadb]', :immediately
 end
 
 %w(openstack-glance python-glanceclient).each do |pkg|

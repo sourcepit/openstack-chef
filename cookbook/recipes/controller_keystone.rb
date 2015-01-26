@@ -7,7 +7,7 @@ openstack_database 'create identity db' do
   password  node['openstack']['keystone']['db']['password']
 
   action [:create_db, :grant_privileges]
-  notifies :restart, 'service[mariadb]'
+  notifies :restart, 'service[mariadb]', :immediately
 end
 
 %w(openstack-keystone python-keystoneclient).each do |pkg|
@@ -25,7 +25,7 @@ template '/etc/keystone/keystone.conf' do
   :debug => node['openstack']['logging']['debug']
   )
   action :create
-  notifies :run, 'bash[create generic certificates]'
+  notifies :run, 'bash[create generic certificates]', :immediately
 end
 
 bash 'create generic certificates' do

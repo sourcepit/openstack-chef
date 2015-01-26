@@ -14,7 +14,7 @@ unless if_management.nil? or if_management.empty?
     :DEVICE => if_management,
     :IPADDR => ip_management
     )
-    notifies :restart, 'service[network]'
+    notifies :restart, 'service[network]', :immediately
   end
 end
 
@@ -25,7 +25,7 @@ unless if_tunnel.nil? or if_tunnel.empty?
     :DEVICE => if_tunnel,
     :IPADDR => ip_tunnel
     )
-    notifies :restart, 'service[network]'
+    notifies :restart, 'service[network]', :immediately
   end
 end
 
@@ -37,8 +37,8 @@ unless if_external.nil? or if_external.empty?
     :IPADDR => ip_external
     )
     # first restart is expected to fail if if_external is configured without an ip address
-    notifies :restart, 'service[network]'
-    notifies :restart, 'service[network]'
+    notifies :restart, 'service[network]', :immediately
+    notifies :restart, 'service[network]', :immediately
   end
 end
 
@@ -54,7 +54,7 @@ template '/etc/sysctl.conf' do
   :is_network_node => node['openstack']['is_network_node']
   )
   action :create
-  notifies :run, 'execute[sysctl]'
+  notifies :run, 'execute[sysctl]', :immediately
   only_if do
     node['openstack']['is_network_node'] or node['openstack']['is_compute_node']
   end
