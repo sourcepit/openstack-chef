@@ -16,15 +16,19 @@ end
 
 action :add_port do
 
-  cmd = Mixlib::ShellOut.new("ovs-vsctl list-ports #{new_resource.bridge} | grep #{new_resource.port}")
-  cmd.run_command
-  cmd.error!
+  check = Mixlib::ShellOut.new("ovs-vsctl list-ports #{new_resource.bridge} | grep #{new_resource.port}")
+  check.run_command
 
-  if (cmd.stdout.empty?)
+  bridge_empty = check.exitstatus == 1 && check.stderr.empty? && check.stdout.empty?
+  port_exists = check.exitstatus == 0 && !check.stdout.empty?
+
+  if (bridge_empty or !port_exists)
     cmd = Mixlib::ShellOut.new("ovs-vsctl add-port #{new_resource.bridge} #{new_resource.port}")
     cmd.run_command
     cmd.error!
     new_resource.updated_by_last_action(true)
+  else
+    check.error!
   end
 
 end
