@@ -5,8 +5,6 @@
 <%= node['network']['management']['ip'] %> <%= node['network']['management']['hosts'].join(" ") %>
 <% end %>
 
-<% unless node['openstack']['controller']['hosts'].nil? or node['openstack']['controller']['hosts'].empty? %>
-<% unless node['openstack']['controller']['ip'].nil? or node['openstack']['controller']['ip'] == node['network']['management']['ip'] %>
+<% if node['openstack']['controller']['ip'] != node['network']['management']['ip'] %>
 <%= node['openstack']['controller']['ip'] %> <%= node['openstack']['controller']['hosts'].join(" ") %>
-<% end %>
 <% end %>
