@@ -5,7 +5,7 @@ action :add_br do
   cmd.run_command
   cmd.error!
 
-  if (check.exitstatus == 2)
+  if (cmd.exitstatus == 2)
     cmd = Mixlib::ShellOut.new("ovs-vsctl add-br #{new_resource.bridge}")
     cmd.run_command
     cmd.error!
