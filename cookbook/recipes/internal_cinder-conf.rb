@@ -18,6 +18,7 @@ template '/etc/cinder/cinder.conf' do
   :rabbit_userid => node['openstack']['rabbitmq']['user'],
   :rabbit_password => node['openstack']['rabbitmq']['password'],
   # my_ip
+  :host => node['network']['management']['hosts'][0],
   :my_ip => node['network']['management']['ip'],
   # db
   :db_url => create_db_url(node['openstack']['db']['host'], "cinder", node['openstack']['cinder']['db']['user'], node['openstack']['cinder']['db']['password']),
