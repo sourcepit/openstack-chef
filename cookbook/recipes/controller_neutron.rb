@@ -7,7 +7,7 @@ openstack_database 'create network db' do
   password  node['openstack']['neutron']['db']['password']
 
   action [:create_db, :grant_privileges]
-  notifies :restart, 'service[mariadb]', :immediately
+  notifies :restart, 'service[mariadb]'
 end
 
 openstack_identity "create network service user and endpoint" do
@@ -54,6 +54,6 @@ end
 service 'neutron-server' do
   supports status: true, restart: true
   action [:enable, :start]
-  subscribes :restart, 'template[/etc/neutron/neutron.conf]', :immediately
-  subscribes :restart, 'template[/etc/neutron/plugins/ml2/ml2_conf.ini]', :immediately
+  subscribes :restart, 'template[/etc/neutron/neutron.conf]'
+  subscribes :restart, 'template[/etc/neutron/plugins/ml2/ml2_conf.ini]'
 end

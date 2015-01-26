@@ -72,37 +72,37 @@ end
 service 'neutron-openvswitch-agent' do
   supports status: true, restart: true
   action [:enable, :start]
-  subscribes :restart, 'template[/etc/neutron/neutron.conf]', :immediately
-  subscribes :restart, 'template[/etc/neutron/plugins/ml2/ml2_conf.ini]', :immediately
-  subscribes :restart, 'template[/etc/neutron/l3_agent.ini]', :immediately
-  subscribes :restart, 'template[/etc/neutron/dhcp_agent.ini]', :immediately
+  subscribes :restart, 'template[/etc/neutron/neutron.conf]'
+  subscribes :restart, 'template[/etc/neutron/plugins/ml2/ml2_conf.ini]'
+  subscribes :restart, 'template[/etc/neutron/l3_agent.ini]'
+  subscribes :restart, 'template[/etc/neutron/dhcp_agent.ini]'
 end
 
 service 'neutron-l3-agent' do
   supports status: true, restart: true
   action [:enable, :start]
-  subscribes :restart, 'template[/etc/neutron/neutron.conf]', :immediately
-  subscribes :restart, 'template[/etc/neutron/plugins/ml2/ml2_conf.ini]', :immediately
-  subscribes :restart, 'template[/etc/neutron/l3_agent.ini]', :immediately
-  subscribes :restart, 'template[/etc/neutron/dhcp_agent.ini]', :immediately
+  subscribes :restart, 'template[/etc/neutron/neutron.conf]'
+  subscribes :restart, 'template[/etc/neutron/plugins/ml2/ml2_conf.ini]'
+  subscribes :restart, 'template[/etc/neutron/l3_agent.ini]'
+  subscribes :restart, 'template[/etc/neutron/dhcp_agent.ini]'
 end
 
 service 'neutron-dhcp-agent' do
   supports status: true, restart: true
   action [:enable, :start]
-  subscribes :restart, 'template[/etc/neutron/neutron.conf]', :immediately
-  subscribes :restart, 'template[/etc/neutron/plugins/ml2/ml2_conf.ini]', :immediately
-  subscribes :restart, 'template[/etc/neutron/l3_agent.ini]', :immediately
-  subscribes :restart, 'template[/etc/neutron/dhcp_agent.ini]', :immediately
+  subscribes :restart, 'template[/etc/neutron/neutron.conf]'
+  subscribes :restart, 'template[/etc/neutron/plugins/ml2/ml2_conf.ini]'
+  subscribes :restart, 'template[/etc/neutron/l3_agent.ini]'
+  subscribes :restart, 'template[/etc/neutron/dhcp_agent.ini]'
 end
 
 service 'neutron-metadata-agent' do
   supports status: true, restart: true
   action [:enable, :start]
-  subscribes :restart, 'template[/etc/neutron/neutron.conf]', :immediately
-  subscribes :restart, 'template[/etc/neutron/plugins/ml2/ml2_conf.ini]', :immediately
-  subscribes :restart, 'template[/etc/neutron/l3_agent.ini]', :immediately
-  subscribes :restart, 'template[/etc/neutron/dhcp_agent.ini]', :immediately
+  subscribes :restart, 'template[/etc/neutron/neutron.conf]'
+  subscribes :restart, 'template[/etc/neutron/plugins/ml2/ml2_conf.ini]'
+  subscribes :restart, 'template[/etc/neutron/l3_agent.ini]'
+  subscribes :restart, 'template[/etc/neutron/dhcp_agent.ini]'
 end
 
 service 'neutron-ovs-cleanup' do

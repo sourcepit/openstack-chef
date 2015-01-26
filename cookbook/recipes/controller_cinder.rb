@@ -7,7 +7,7 @@ openstack_database 'create volume db' do
   password  node['openstack']['cinder']['db']['password']
 
   action [:create_db, :grant_privileges]
-  notifies :restart, 'service[mariadb]', :immediately
+  notifies :restart, 'service[mariadb]'
 end
 
 openstack_identity "create volume user and endpoint" do
@@ -96,11 +96,11 @@ end
 service 'openstack-cinder-api' do
   supports status: true, restart: true
   action [:enable, :start]
-  subscribes :restart, 'template[/etc/cinder/cinder.conf]', :immediately
+  subscribes :restart, 'template[/etc/cinder/cinder.conf]'
 end
 
 service 'openstack-cinder-scheduler' do
   supports status: true, restart: true
   action [:enable, :start]
-  subscribes :restart, 'template[/etc/cinder/cinder.conf]', :immediately
+  subscribes :restart, 'template[/etc/cinder/cinder.conf]'
 end

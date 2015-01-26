@@ -9,9 +9,9 @@ end
 #Install server packages
 package 'mariadb-server' do
   action :install
-  notifies :enable, 'service[mariadb]', :immediately
-  notifies :start, 'service[mariadb]', :immediately
-  notifies :run, 'execute[change first install root password]', :immediately
+  notifies :enable, 'service[mariadb]'
+  notifies :start, 'service[mariadb]'
+  notifies :run, 'execute[change first install root password]'
 end
 
 execute 'change first install root password' do
@@ -26,7 +26,7 @@ template '/etc/my.cnf' do
   owner 'root'
   group 'root'
   mode '0644'
-  notifies :restart, 'service[mariadb]', :immediately
+  notifies :restart, 'service[mariadb]'
 end
 
 service 'mariadb' do
