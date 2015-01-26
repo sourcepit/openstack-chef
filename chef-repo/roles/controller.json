@@ -13,10 +13,6 @@
 					"controller.bosch-si.com",
 					"controller"
 				]
-			},
-			"tunnel": {
-				"if": "enp0s9",
-				"ip": "10.0.1.11"
 			}
 		}
 	},
