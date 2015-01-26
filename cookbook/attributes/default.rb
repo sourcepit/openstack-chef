@@ -22,9 +22,9 @@ default['openstack']['logging']['debug'] = 'false'
 default['openstack']['controller']['ip'] = node['network']['management']['ip']
 
 default['openstack']['is_controller_node'] = node['openstack']['controller']['ip'] == node['network']['management']['ip']
-default['openstack']['is_network_node'] = node.recipes.include?('network_neutron')
-default['openstack']['is_compute_node'] = node.recipes.include?('compute_nova')
-default['openstack']['is_storage_node'] = node.recipes.include?('storage_cinder')
+default['openstack']['is_network_node'] = node.recipes.include?('openstack::network_neutron')
+default['openstack']['is_compute_node'] = node.recipes.include?('openstack::compute_nova')
+default['openstack']['is_storage_node'] = node.recipes.include?('openstack::storage_cinder')
 
 default['openstack']['controller']['hosts'] = node['openstack']['is_controller_node'] ? node['network']['management']['hosts'] : nil
 default['openstack']['controller']['host'] = node['openstack']['controller']['hosts'].nil? ? nil : node['openstack']['controller']['hosts'][0]
