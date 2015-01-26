@@ -35,7 +35,6 @@ default['openstack']['rabbitmq']['password'] = node['rabbitmq']['password']
 default['openstack']['admin']['tenant'] = 'admin'
 default['openstack']['admin']['user'] = 'admin'
 default['openstack']['admin']['password'] = 'secret'
-default['openstack']['admin']['email'] = 'admin@' + node['openstack']['controller']['host']
 
 default['openstack']['db']['user'] = 'admin'
 default['openstack']['db']['password'] = 'secret'
