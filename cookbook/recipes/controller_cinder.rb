@@ -76,7 +76,7 @@ template '/etc/cinder/cinder.conf' do
   :rabbit_host => node['openstack']['rabbitmq']['host'],
   :rabbit_userid => node['openstack']['rabbitmq']['user'],
   :rabbit_password => node['openstack']['rabbitmq']['password'],
-  :my_ip => node['network']['ip_management'],
+  :my_ip => node['network']['management']['ip'],
   :db_url => create_db_url(node['mariadb']['host'], "cinder", node['openstack']['cinder']['db']['user'], node['openstack']['cinder']['db']['password']),
   :glance_host => node['openstack']['controller']['host'],
   :keystone_auth_uri => "http://#{node['openstack']['controller']['host']}:5000/v2.0",

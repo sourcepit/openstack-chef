@@ -8,7 +8,7 @@ template '/etc/neutron/plugins/ml2/ml2_conf.ini' do
   :is_controller_node => is_controller_node,
   :is_network_node => is_network_node,
   :is_compute_node => is_compute_node,
-  :local_ip=> node['network']['ip_tunnel']
+  :local_ip=> node['network']['tunnel']['ip']
   )
   action :create
 end

@@ -56,7 +56,7 @@ end
 
 openstack_ovs 'Create Open vSwitch bridge for external network' do
   bridge 'br-ex'
-  port node['network']['if_external']
+  port node['network']['external']['if']
   action [:add_br, :add_port]
 end
 

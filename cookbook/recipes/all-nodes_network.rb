@@ -1,11 +1,11 @@
-if_management = node['network']['if_management']
-ip_management = node['network']['ip_management']
+if_management = node['network']['management']['if']
+ip_management = node['network']['management']['ip']
 
-if_tunnel = ( node['network']['if_tunnel'] == if_management ) ? nil : node['network']['if_tunnel']
-ip_tunnel = node['network']['ip_tunnel']
+if_tunnel = ( node['network']['tunnel']['if'] == if_management ) ? nil : node['network']['tunnel']['if']
+ip_tunnel = node['network']['tunnel']['ip']
 
-if_external = ( node['network']['if_external'] == if_management or node['network']['if_external'] == if_tunnel ) ? nil : node['network']['if_external']
-ip_external = node['network']['ip_external']
+if_external = ( node['network']['external']['if'] == if_management or node['network']['external']['if'] == if_tunnel ) ? nil : node['network']['external']['if']
+ip_external = node['network']['external']['ip']
 
 unless if_management.nil? or if_management.empty?
   template '/etc/sysconfig/network-scripts/ifcfg-' + if_management do

@@ -6,9 +6,21 @@
 	},
 	"override_attributes": {
 		"network": {
-			"if_management": "enp0s8",
-			"if_tunnel": "enp0s9",
-			"if_external": "enp0s10"
+			"management": {
+				"if": "enp0s8",
+				"ip": "10.0.0.11",
+				"hosts": [
+					"controller.bosch-si.com",
+					"controller"
+				]
+			},
+			"tunnel": {
+				"if": "enp0s9",
+				"ip": "10.0.1.11"
+			},
+			"external": {
+				"if": "enp0s10"
+			}
 		}
 	},
 	"chef_type": "role",
