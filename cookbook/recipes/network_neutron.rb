@@ -19,7 +19,7 @@ template '/etc/neutron/dhcp_agent.ini' do
 end
 
 template '/etc/neutron/dnsmasq-neutron.conf' do
-  source 'dnsmasq-neutron.conf'
+  source 'dnsmasq-neutron.conf.erb'
   action :create
 end
 
