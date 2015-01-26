@@ -26,8 +26,8 @@ default['openstack']['is_network_node'] = !(node['network']['external']['if'].ni
 default['openstack']['is_compute_node'] = !(node['openstack']['is_controller_node'] or node['openstack']['is_network_node'])
 
 default['openstack']['controller']['hosts'] = node['openstack']['is_controller_node'] ? node['network']['management']['hosts'] : nil
-default['openstack']['controller']['host'] = node['openstack']['is_controller_node'] ? node['openstack']['controller']['hosts'][0] : nil
-  
+default['openstack']['controller']['host'] = node['openstack']['controller']['hosts'].nil? nil : node['openstack']['controller']['hosts'][0]
+
 default['openstack']['rabbitmq']['host'] = node['openstack']['controller']['host']
 default['openstack']['rabbitmq']['user'] = node['rabbitmq']['user']
 default['openstack']['rabbitmq']['password'] = node['rabbitmq']['password']
