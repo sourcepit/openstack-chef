@@ -11,3 +11,7 @@ end
 package 'openstack-selinux' do
   action :install
 end
+
+package 'htop' do
+  action :install
+end
