@@ -12,6 +12,8 @@ template '/etc/neutron/neutron.conf' do
       # debug
       :verbose => node['openstack']['logging']['verbose'],
       :debug => node['openstack']['logging']['debug'],
+      # host
+      :host => node['network']['management']['hosts'][0],
       # rabbitmq
       :rabbit_host => node['openstack']['rabbitmq']['host'],
       :rabbit_userid => node['openstack']['rabbitmq']['user'],
