@@ -11,10 +11,12 @@ rabbit_password=<%= @rabbit_password %>
 
 auth_strategy=keystone
 
+<% if @is_storage_node %>
 glance_host=<%= @glance_host %>
 
 iscsi_helper=lioadm
 
+<% end %>
 
 [database]
 connection=<%= @db_url %>

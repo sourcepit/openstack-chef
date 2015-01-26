@@ -22,8 +22,9 @@ default['openstack']['logging']['debug'] = 'false'
 default['openstack']['controller']['ip'] = node['network']['management']['ip']
 
 default['openstack']['is_controller_node'] = node['openstack']['controller']['ip'] == node['network']['management']['ip']
-default['openstack']['is_network_node'] = !(node['network']['external']['if'].nil? or node['network']['external']['if'].empty?)
-default['openstack']['is_compute_node'] = !(node['openstack']['is_controller_node'] or node['openstack']['is_network_node'])
+default['openstack']['is_network_node'] = node.recipes.include?('network_neutron')
+default['openstack']['is_compute_node'] = node.recipes.include?('compute_nova')
+default['openstack']['is_storage_node'] = node.recipes.include?('storage_cinder')
 
 default['openstack']['controller']['hosts'] = node['openstack']['is_controller_node'] ? node['network']['management']['hosts'] : nil
 default['openstack']['controller']['host'] = node['openstack']['controller']['hosts'].nil? ? nil : node['openstack']['controller']['hosts'][0]
@@ -31,13 +32,15 @@ default['openstack']['controller']['host'] = node['openstack']['controller']['ho
 default['openstack']['rabbitmq']['host'] = node['openstack']['controller']['host']
 default['openstack']['rabbitmq']['user'] = node['rabbitmq']['user']
 default['openstack']['rabbitmq']['password'] = node['rabbitmq']['password']
+  
+default['openstack']['db']['host'] = node['openstack']['controller']['host']
+default['openstack']['db']['user'] = 'admin'
+default['openstack']['db']['password'] = 'secret'
 
 default['openstack']['admin']['tenant'] = 'admin'
 default['openstack']['admin']['user'] = 'admin'
 default['openstack']['admin']['password'] = 'secret'
 
-default['openstack']['db']['user'] = 'admin'
-default['openstack']['db']['password'] = 'secret'
 default['openstack']['service']['tenant'] = 'service'
 default['openstack']['service']['user'] = 'service'
 default['openstack']['service']['password'] = 'secret'

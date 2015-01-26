@@ -68,25 +68,7 @@ end
   end
 end
 
-template '/etc/cinder/cinder.conf' do
-  source 'cinder.conf.erb'
-  variables(
-  :verbose => node['openstack']['logging']['verbose'],
-  :debug => node['openstack']['logging']['debug'],
-  :rabbit_host => node['openstack']['rabbitmq']['host'],
-  :rabbit_userid => node['openstack']['rabbitmq']['user'],
-  :rabbit_password => node['openstack']['rabbitmq']['password'],
-  :my_ip => node['network']['management']['ip'],
-  :db_url => create_db_url(node['mariadb']['host'], "cinder", node['openstack']['cinder']['db']['user'], node['openstack']['cinder']['db']['password']),
-  :glance_host => node['openstack']['controller']['host'],
-  :keystone_auth_uri => "http://#{node['openstack']['controller']['host']}:5000/v2.0",
-  :keystone_identity_uri => "http://#{node['openstack']['controller']['host']}:35357",
-  :service_tenant => node['openstack']['service']['tenant'],
-  :service_user => node['openstack']['cinder']['service']['user'],
-  :service_password => node['openstack']['cinder']['service']['password']
-  )
-  action :create
-end
+include_recipe 'openstack::internal_cinder-conf'
 
 execute 'sync volume db' do
   command 'su -s /bin/sh -c "cinder-manage db sync" cinder'

@@ -23,7 +23,7 @@ template '/etc/neutron/neutron.conf' do
       :nova_admin_tenant_id =>  is_controller_node ? get_tenant_id(node['openstack']['admin']['tenant'], node['openstack']['admin']['user'], node['openstack']['admin']['password'], "http://#{node['openstack']['controller']['host']}:35357/v2.0", node['openstack']['service']['tenant']) : nil,
       :nova_admin_password => is_controller_node ? node['openstack']['nova']['service']['password']: nil,
       # db
-      :db_url => is_controller_node ? create_db_url(node['mariadb']['host'], "neutron", node['openstack']['neutron']['db']['user'], node['openstack']['neutron']['db']['password']) : nil,
+      :db_url => is_controller_node ? create_db_url(node['openstack']['db']['host'], "neutron", node['openstack']['neutron']['db']['user'], node['openstack']['neutron']['db']['password']) : nil,
       # keystone
       :keystone_auth_uri => "http://#{node['openstack']['controller']['host']}:5000/v2.0",
       :keystone_identity_uri => "http://#{node['openstack']['controller']['host']}:35357",

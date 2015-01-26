@@ -45,7 +45,7 @@ end
 template '/etc/glance/glance-api.conf' do
   source 'glance-api.conf.erb'
   variables(
-  :db_url => create_db_url(node['mariadb']['host'], "glance", node['openstack']['glance']['db']['user'], node['openstack']['glance']['db']['password']),
+  :db_url => create_db_url(node['openstack']['db']['host'], "glance", node['openstack']['glance']['db']['user'], node['openstack']['glance']['db']['password']),
   :verbose => node['openstack']['logging']['verbose'],
   :debug => node['openstack']['logging']['debug'],
   :keystone_auth_uri => "http://#{node['openstack']['controller']['host']}:5000/v2.0",
@@ -60,7 +60,7 @@ end
 template '/etc/glance/glance-registry.conf' do
   source 'glance-registry.conf.erb'
   variables(
-  :db_url => create_db_url(node['mariadb']['host'], "glance", node['openstack']['glance']['db']['user'], node['openstack']['glance']['db']['password']),
+  :db_url => create_db_url(node['openstack']['db']['host'], "glance", node['openstack']['glance']['db']['user'], node['openstack']['glance']['db']['password']),
   :verbose => node['openstack']['logging']['verbose'],
   :debug => node['openstack']['logging']['debug'],
   :keystone_auth_uri => "http://#{node['openstack']['controller']['host']}:5000/v2.0",

@@ -22,7 +22,7 @@ template '/etc/nova/nova.conf' do
   :vncserver_proxyclient_address => node['network']['management']['ip'],
   :novncproxy_base_url => is_compute_node ? "http://#{node['openstack']['controller']['host']}:6080/vnc_auto.html" : nil,
   #db
-  :db_url => is_controller_node ? create_db_url(node['mariadb']['host'], "nova", node['openstack']['nova']['db']['user'], node['openstack']['nova']['db']['password']) : nil,
+  :db_url => is_controller_node ? create_db_url(node['openstack']['db']['host'], "nova", node['openstack']['nova']['db']['user'], node['openstack']['nova']['db']['password']) : nil,
   #glance
   :glance_host => node['openstack']['controller']['host'],
   # keystone

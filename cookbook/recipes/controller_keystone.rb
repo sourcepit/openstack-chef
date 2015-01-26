@@ -19,7 +19,7 @@ end
 template '/etc/keystone/keystone.conf' do
   source 'keystone.conf.erb'
   variables(
-  :db_url => create_db_url(node['mariadb']['host'], "keystone", node['openstack']['keystone']['db']['user'], node['openstack']['keystone']['db']['password']),
+  :db_url => create_db_url(node['openstack']['db']['host'], "keystone", node['openstack']['keystone']['db']['user'], node['openstack']['keystone']['db']['password']),
   :admin_token => node['openstack']['keystone']['admin_token'],
   :verbose => node['openstack']['logging']['verbose'],
   :debug => node['openstack']['logging']['debug']

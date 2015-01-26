@@ -1,0 +1,41 @@
+{
+	"name": "storage",
+	"json_class": "Chef::Role",
+	"default_attributes": {
+		
+	},
+	"override_attributes": {
+		"network": {
+			"management": {
+				"if": "enp0s8",
+				"ip": "10.0.0.41",
+				"hosts": [
+					"block1.bosch-si.com",
+					"block1"
+				]
+			},
+			"tunnel": {
+				"if": "enp0s9",
+				"ip": "10.0.1.41"
+			}
+		},
+		"openstack": {
+			"controller": {
+				"ip": "10.0.0.11",
+				"hosts": [
+					"controller.bosch-si.com",
+					"controller"
+				]
+			}
+		}
+	},
+	"chef_type": "role",
+	"run_list": [
+		"recipe[openstack::all-nodes_network]",
+		"recipe[openstack::all-nodes_yum]",
+		"recipe[openstack::storage_cinder]"
+	],
+	"env_run_lists": {
+		
+	}
+}
