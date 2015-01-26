@@ -59,3 +59,53 @@ openstack_ovs 'Create Open vSwitch bridge for external network' do
   port node['network']['if_external']
   action [:add_br, :add_port]
 end
+
+execute 'fix packaging bug of Open vSwitch agent' do
+  command <<-eos
+    cp /usr/lib/systemd/system/neutron-openvswitch-agent.service /usr/lib/systemd/system/neutron-openvswitch-agent.service.orig
+    sed -i 's,plugins/openvswitch/ovs_neutron_plugin.ini,plugin.ini,g' /usr/lib/systemd/system/neutron-openvswitch-agent.service
+  eos
+  action :run
+  not_if { ::File.exists?('/usr/lib/systemd/system/neutron-openvswitch-agent.service.orig')}
+end
+
+service 'neutron-openvswitch-agent' do
+  supports status: true, restart: true
+  action [:enable, :start]
+  subscribes :restart, 'template[/etc/neutron/neutron.conf]', :immediately
+  subscribes :restart, 'template[/etc/neutron/plugins/ml2/ml2_conf.ini]', :immediately
+  subscribes :restart, 'template[/etc/neutron/l3_agent.ini]', :immediately
+  subscribes :restart, 'template[/etc/neutron/dhcp_agent.ini]', :immediately
+end
+
+service 'neutron-l3-agent' do
+  supports status: true, restart: true
+  action [:enable, :start]
+  subscribes :restart, 'template[/etc/neutron/neutron.conf]', :immediately
+  subscribes :restart, 'template[/etc/neutron/plugins/ml2/ml2_conf.ini]', :immediately
+  subscribes :restart, 'template[/etc/neutron/l3_agent.ini]', :immediately
+  subscribes :restart, 'template[/etc/neutron/dhcp_agent.ini]', :immediately
+end
+
+service 'neutron-dhcp-agent' do
+  supports status: true, restart: true
+  action [:enable, :start]
+  subscribes :restart, 'template[/etc/neutron/neutron.conf]', :immediately
+  subscribes :restart, 'template[/etc/neutron/plugins/ml2/ml2_conf.ini]', :immediately
+  subscribes :restart, 'template[/etc/neutron/l3_agent.ini]', :immediately
+  subscribes :restart, 'template[/etc/neutron/dhcp_agent.ini]', :immediately
+end
+
+service 'neutron-metadata-agent' do
+  supports status: true, restart: true
+  action [:enable, :start]
+  subscribes :restart, 'template[/etc/neutron/neutron.conf]', :immediately
+  subscribes :restart, 'template[/etc/neutron/plugins/ml2/ml2_conf.ini]', :immediately
+  subscribes :restart, 'template[/etc/neutron/l3_agent.ini]', :immediately
+  subscribes :restart, 'template[/etc/neutron/dhcp_agent.ini]', :immediately
+end
+
+service 'neutron-ovs-cleanup' do
+  supports status: true, restart: true
+  action :enable
+end
