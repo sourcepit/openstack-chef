@@ -16,6 +16,7 @@ template '/etc/nova/nova.conf' do
   :rabbit_userid => node['openstack']['rabbitmq']['user'],
   :rabbit_password => node['openstack']['rabbitmq']['password'],
   # my_op
+  :host => node['network']['management']['hosts'][0],
   :my_ip => node['network']['management']['ip'],
   # vnc
   :vncserver_listen => is_controller_node ? node['network']['management']['ip'] : '0.0.0.0',
