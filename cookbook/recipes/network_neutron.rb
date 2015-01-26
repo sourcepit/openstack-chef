@@ -26,6 +26,7 @@ end
 execute 'pkill dnsmasq' do
   user 'root'
   command 'pkill dnsmasq'
+  ignore_failure true
   action :run
 end
 
