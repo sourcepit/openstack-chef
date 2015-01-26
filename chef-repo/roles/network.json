@@ -10,8 +10,8 @@
 				"if": "enp0s8",
 				"ip": "10.0.0.21",
 				"hosts": [
-					"controller.bosch-si.com",
-					"controller"
+					"network.bosch-si.com",
+					"network"
 				]
 			},
 			"tunnel": {
