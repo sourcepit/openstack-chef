@@ -16,15 +16,7 @@
 	[
 		"recipe[openstack::all-nodes_network]",
 		"recipe[openstack::all-nodes_yum]",
-		"recipe[openstack::mariadb]",
-		"recipe[openstack::rabbitmq]",
-		"recipe[openstack::controller_keystone]",
-		"recipe[openstack::controller_glance]",
-		"recipe[openstack::controller_nova]",
-		"recipe[openstack::controller_neutron]",
-		"recipe[openstack::network_neutron]",
-		"recipe[openstack::controller_horizon]",
-		"recipe[openstack::controller_cinder]"
+		"recipe[openstack::compute_nova]"
 	],
 
 	"env_run_lists": 

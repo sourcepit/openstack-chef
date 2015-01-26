@@ -13,7 +13,7 @@ my_ip=<%= @my_ip %>
 
 vncserver_listen=<%= @vncserver_listen %>
 vncserver_proxyclient_address=<%= @vncserver_proxyclient_address %>
-<% unless @novncproxy_base_url.nil? %>
+<% if @is_compute_node %>
 novncproxy_base_url=<%= @novncproxy_base_url %> 
 <% end %>
 
@@ -22,9 +22,12 @@ security_group_api=neutron
 linuxnet_interface_driver=nova.network.linux_net.LinuxOVSInterfaceDriver
 firewall_driver=nova.virt.firewall.NoopFirewallDriver
 
+<% if @is_controller_node %>
+
 [database]
 connection=<%= @db_url %>
 
+<% end %>
 
 [glance]
 host=<%= @glance_host %>
@@ -46,5 +49,14 @@ admin_tenant_name=<%= @neutron_admin_tenant_name %>
 admin_username=<%= @neutron_admin_username %>
 admin_password=<%= @neutron_admin_password %>
 
+<% if @is_controller_node %>
 service_metadata_proxy=True
 metadata_proxy_shared_secret=<%= @metadata_proxy_shared_secret %>
+
+<% end %>
+
+<% if @is_compute_node %>
+[libvirt]
+
+virt_type=<%= @virt_type %>
+<% end %>
