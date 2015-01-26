@@ -6,7 +6,7 @@ template '/etc/neutron/neutron.conf' do
   source 'neutron.conf.erb'
   variables(
   lazy {{
-      :is_controller_node => is_network_node,
+      :is_controller_node => is_controller_node,
       :is_network_node => is_network_node,
       :is_compute_node => is_compute_node,
       # debug

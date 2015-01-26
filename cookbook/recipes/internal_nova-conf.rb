@@ -5,7 +5,7 @@ is_compute_node = node['openstack']['is_compute_node']
 template '/etc/nova/nova.conf' do
   source 'nova.conf.erb'
   variables(
-  :is_controller_node => is_network_node,
+  :is_controller_node => is_controller_node,
   :is_network_node => is_network_node,
   :is_compute_node => is_compute_node,
   # debug
