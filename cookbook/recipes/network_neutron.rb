@@ -53,3 +53,9 @@ service 'openvswitch' do
   supports status: true, restart: true
   action [:enable, :start]
 end
+
+openstack_ovs 'Create Open vSwitch bridge for external network' do
+  bridge 'br-ex'
+  port node['network']['if_external']
+  action [:add_br, :add_port]
+end
