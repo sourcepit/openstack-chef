@@ -54,6 +54,6 @@ end
 service 'neutron-server' do
   supports status: true, restart: true
   action [:enable, :start]
-  subscribes :restart, 'template[/etc/neutron/neutron.conf]'
-  subscribes :restart, 'template[/etc/neutron/plugins/ml2/ml2_conf.ini]'
+  subscribes :restart, 'template[/etc/neutron/neutron.conf]', :immediately
+  subscribes :restart, 'template[/etc/neutron/plugins/ml2/ml2_conf.ini]', :immediately
 end

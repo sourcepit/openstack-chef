@@ -27,5 +27,5 @@ end
 service 'httpd' do
   supports status: true, restart: true
   action [:enable, :start]
-  subscribes :restart, 'template[/etc/openstack-dashboard/local_settings]'
+  subscribes :restart, 'template[/etc/openstack-dashboard/local_settings]', :immediately
 end

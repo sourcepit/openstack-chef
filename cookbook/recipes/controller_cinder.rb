@@ -96,11 +96,11 @@ end
 service 'openstack-cinder-api' do
   supports status: true, restart: true
   action [:enable, :start]
-  subscribes :restart, 'template[/etc/cinder/cinder.conf]'
+  subscribes :restart, 'template[/etc/cinder/cinder.conf]', :immediately
 end
 
 service 'openstack-cinder-scheduler' do
   supports status: true, restart: true
   action [:enable, :start]
-  subscribes :restart, 'template[/etc/cinder/cinder.conf]'
+  subscribes :restart, 'template[/etc/cinder/cinder.conf]', :immediately
 end
