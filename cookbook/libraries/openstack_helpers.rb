@@ -1,13 +1,5 @@
 module Openstack
   module Helpers
-    def determine_virt_type
-      cmd = Mixlib::ShellOut.new("egrep -c '(vmx|svm)' /proc/cpuinfo")
-      cmd.valid_exit_codes = [0,1]
-      cmd.run_command
-      cmd.error!
-      cmd.stdout == 0 ? 'qemu' : 'kvm'
-    end
-
     def create_db_url(host, database, user, password)
       url = "mysql://"
       unless user.nil? or user.empty?

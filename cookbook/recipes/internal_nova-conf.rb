@@ -40,7 +40,7 @@ template '/etc/nova/nova.conf' do
   :neutron_admin_password => node['openstack']['neutron']['service']['password'],
   :metadata_proxy_shared_secret =>  is_controller_node ? node['openstack']['neutron']['metadata']['shared_secret'] : nil,
   # virt_type
-  :virt_type => determine_virt_type
+  :virt_type => 'qemu'
   )
   action :create
 end
