@@ -32,6 +32,7 @@
 	"chef_type": "role",
 	"run_list": [
 		"recipe[openstack::all-nodes_network]",
+		"recipe[openstack::all-nodes_sysctl+hosts]",
 		"recipe[openstack::all-nodes_yum]",
 		"recipe[openstack::compute_nova]",
 		"recipe[openstack::compute_neutron]"
