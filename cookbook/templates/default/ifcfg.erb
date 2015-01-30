@@ -1,15 +1,22 @@
 <% if @IPADDR.nil? or @IPADDR.empty? %>
 TYPE=Ethernet
 DEVICE=<%= @DEVICE %>
+PROMISC="yes"
 ONBOOT="yes"
 BOOTPROTO="none"
 <% else %>
 TYPE=Ethernet
 DEVICE=<%= @DEVICE %>
+BOOTPROTO=none
 IPADDR=<%= @IPADDR %>
 NETMASK=255.255.255.0
-ONBOOT=yes
-BOOTPROTO=none
+<% unless @GATEWAY.nil? or @GATEWAY.empty? %>
+GATEWAY=<%= @GATEWAY %>
+<%end>
 NM_CONTROLLED=no
-PEERDNS=no
+ONBOOT=yes
+DEFROUTE="yes"
+PEERDNS="no"
+PEERROUTES="yes"
+IPV4_FAILURE_FATAL="no"
 <% end %>
