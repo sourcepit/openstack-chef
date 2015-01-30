@@ -12,7 +12,7 @@ IPADDR=<%= @IPADDR %>
 NETMASK=255.255.255.0
 <% unless @GATEWAY.nil? or @GATEWAY.empty? %>
 GATEWAY=<%= @GATEWAY %>
-<%end>
+<% end %>
 NM_CONTROLLED=no
 ONBOOT=yes
 DEFROUTE="yes"
